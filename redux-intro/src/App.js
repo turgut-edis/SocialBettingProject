@@ -1,17 +1,56 @@
 import React from 'react';
+import './App.css';
 import Counter from "./components/Counter"
 import IncreaseCounter from "./components/IncreaseCounter"
 import DecreaseCounter from "./components/DecreaseCounter"
 import IncreaseByTwoCounter from "./components/IncreaseByTwoCounter"
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
-function App() {
+import Login from "./components/Login";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  Switch,
+ } from "react-router-dom";
+ const App = () => {
   return (
-    <div>
-      <Counter/>
-      <IncreaseCounter/>
-      <DecreaseCounter/>
-      <IncreaseByTwoCounter/>
+    
+
+  <Router>
+  
+   
+    <div className="App">
+  <nav className="navbar navbar-expand-lg navbar-light fixed-top">
+      <div className="container">
+        <Link className="navbar-brand" to={"/"}>BETaBET</Link>
+        <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
+          <ul className="navbar-nav ml-auto">
+            <li className="nav-item">
+              <Link className="nav-link" to={"/"}>Sign in</Link>
+            </li>
+            <li className="nav-item2">
+              <Link className="nav-link" to={"/register"}>Sign up</Link>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    
+    <div className="outer">
+      <div className="inner">
+      <Routes>
+      <Route path="/" element={<Login/>} />
+      </Routes>
+      </div>
     </div>
+    </div>
+   
+  </Router>
+
+
+
   );
 }
 

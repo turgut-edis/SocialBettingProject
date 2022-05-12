@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
 html {
     height: 100%;
 }
@@ -217,6 +218,7 @@ h2 small {
   position:relative; 
   margin-bottom:45px; 
   
+  
 }
 .group5 			  { 
     position:relative; 
@@ -242,7 +244,7 @@ h2 small {
     float:right;
   }
 input 				{
-  font-size:18px;
+  font-size:16px;
   background: none;
     border: none;
   padding:10px 10px 10px 5px;
@@ -269,7 +271,7 @@ input 				{
     border-bottom:1px solid #757575;
   }
 
-input:focus 		{ outline:none; }
+input:focus 		{ outline:none; color:whitesmoke}
 
 /* LABEL ======================================= */
 label 				 {
@@ -315,6 +317,7 @@ input:focus ~ label, input:valid ~ label 		{
 /* active state */
 input:focus ~ .bar:before, input:focus ~ .bar:after {
   width:50%;
+  color:whitesmoke;
 }
 
 /* HIGHLIGHTER ================================== */
@@ -333,6 +336,7 @@ input:focus ~ .highlight {
   -webkit-animation:inputHighlighter 0.3s ease;
   -moz-animation:inputHighlighter 0.3s ease;
   animation:inputHighlighter 0.3s ease;
+  color:whitesmoke;
 }
 
 /* ANIMATIONS ================ */
@@ -386,3 +390,35 @@ input:focus ~ .highlight {
   margin-right: 300px;
   display: flex;
 }
+.right-rect{
+    z-index:0;
+    height:550px;
+    width: 250px;
+    border-bottom: 3px solid #FFEB3B !important;
+    background-color: none;
+    margin-right: 500px;
+    position: absolute;
+bottom: 0;
+right: -490px;
+    border: solid;
+    text-align: left;
+    font-size: 15px;
+    
+}
+.left-rect{
+    z-index:0;
+    height:550px;
+    width: 1000px;
+    border-bottom: 3px solid #FFEB3B !important;
+    background-color: none;
+    margin-left: 0px;
+    position: absolute;
+bottom: 0;
+right: 270px;
+    border: solid;
+    text-align: left;
+    font-size: 15px;
+    
+}
+
+

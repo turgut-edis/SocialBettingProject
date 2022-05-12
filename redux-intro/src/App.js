@@ -8,6 +8,8 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 import Login from "./components/Login";
 import Register from "./components/Register";
+import HomePage from './components/HomePage';
+
 import {
   BrowserRouter as Router,
   Routes,
@@ -15,6 +17,7 @@ import {
   Link,
   Switch,
  } from "react-router-dom";
+
  const App = () => {
   return (
     
@@ -23,27 +26,12 @@ import {
   
    
     <div className="App">
-  <nav className="navbar navbar-expand-lg navbar-light fixed-top">
-      <div className="container">
-        <Link className="navbar-brand" to={"/"}>BETaBET</Link>
-        <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
-          <ul className="navbar-nav ml-auto">
-            <li className="nav-item">
-              <Link className="nav-link" to={"/"}>Login</Link>
-            </li>
-            <li className="nav-item2">
-              <Link className="nav-link" to={"/register"}>Register</Link>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-    
     <div className="outer">
       <div className="inner">
       <Routes>
       <Route path="/" element={<Login/>} />
       <Route path="/register" element={<Register/>} />
+      <Route path="/homepage" element={<HomePage/>} />
       </Routes>
       </div>
     </div>

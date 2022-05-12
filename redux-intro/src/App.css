@@ -102,3 +102,15 @@ body {
   right: 16px;
   font-size: 18px;
 }
+.nav-item7{
+  position: absolute;
+  top: 16px;
+  right: 100px;
+  font-size: 18px;
+}
+.nav-item8{
+  position: absolute;
+  top: 16px;
+  right: 200px;
+  font-size: 18px;
+}

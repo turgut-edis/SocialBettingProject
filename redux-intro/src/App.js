@@ -7,6 +7,7 @@ import IncreaseByTwoCounter from "./components/IncreaseByTwoCounter"
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 import Login from "./components/Login";
+import Register from "./components/Register";
 import {
   BrowserRouter as Router,
   Routes,
@@ -28,10 +29,10 @@ import {
         <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
           <ul className="navbar-nav ml-auto">
             <li className="nav-item">
-              <Link className="nav-link" to={"/"}>Sign in</Link>
+              <Link className="nav-link" to={"/"}>Login</Link>
             </li>
             <li className="nav-item2">
-              <Link className="nav-link" to={"/register"}>Sign up</Link>
+              <Link className="nav-link" to={"/register"}>Register</Link>
             </li>
           </ul>
         </div>
@@ -42,6 +43,7 @@ import {
       <div className="inner">
       <Routes>
       <Route path="/" element={<Login/>} />
+      <Route path="/register" element={<Register/>} />
       </Routes>
       </div>
     </div>

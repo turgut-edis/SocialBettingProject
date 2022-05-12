@@ -184,7 +184,7 @@ body {
 
 
 .login.login-container {
-    width: 300px;
+    width: 400px;
 }
 .wrapper.login-container {
     margin-top: 140px;
@@ -216,7 +216,31 @@ h2 small {
 .group 			  { 
   position:relative; 
   margin-bottom:45px; 
+  
 }
+.group5 			  { 
+    position:relative; 
+    margin-bottom:45px; 
+    
+  }
+
+.group2 			  { 
+    position:relative; 
+    margin-bottom:45px; 
+    float:left;
+  }
+  .group3 			  { 
+    position:relative; 
+    margin-bottom:45px; 
+    float:left;
+    white-space: nowrap;
+  }
+  .group4			  { 
+    position:relative; 
+    margin-bottom:45px; 
+    margin-right:0px;
+    float:right;
+  }
 input 				{
   font-size:18px;
   background: none;
@@ -226,6 +250,25 @@ input 				{
   width:300px;
   border-bottom:1px solid #757575;
 }
+.input2 				{
+    font-size:18px;
+    background: none;
+      border: none;
+    padding:10px 10px 10px 5px;
+    display:block;
+    width:250px;
+    border-bottom:1px solid #757575;
+  }
+  .input3			{
+    font-size:18px;
+    background: none;
+      border: none;
+    padding:10px 10px 10px 5px;
+    display:block;
+    width:700px;
+    border-bottom:1px solid #757575;
+  }
+
 input:focus 		{ outline:none; }
 
 /* LABEL ======================================= */
@@ -312,6 +355,32 @@ input:focus ~ .highlight {
   width: 200px;
   position:absolute;
   left:190px;
+
+  margin: 90px;
+  margin-right: 300px;
+  display: flex;
+}
+.container-content2 {
+    border: 5px solid #FFFF00;
+    position: absolute;
+    
+    bottom: -100px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-color: orange;
+    border-image: none;
+    border-style: solid solid none;
+    border-width: 1px 0;
+}
+.bet-text2{
+    white-space: nowrap;
+    color:whitesmoke;
+    height: 200px;
+  width: 200px;
+  position:absolute;
+  left:190px;
+  bottom: 280px;
 
   margin: 90px;
   margin-right: 300px;

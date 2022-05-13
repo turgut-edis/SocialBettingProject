@@ -24,6 +24,7 @@ export default function HomePage() {
 
   return (
     <body>
+        
      
 
         
@@ -36,13 +37,13 @@ export default function HomePage() {
               <Link className="nav-link" to={"/homepage"}>Home</Link>
             </li>
             <li className="nav-item4">
-              <Link className="nav-link" to={"/homepage"}>Social</Link>
+              <Link className="nav-link" to={"/socialpage"}>Social</Link>
             </li>
             <li className="nav-item5">
-              <Link className="nav-link" to={"/homepage"}>Profile</Link>
+              <Link className="nav-link" to={"/profilepage"}>Profile</Link>
             </li>
             <li className="nav-item6">
-              <Link className="nav-link" to={"/homepage"}>Raffle</Link>
+              <Link className="nav-link" to={"/raffle"}>Raffle</Link>
             </li>
             <li className="nav-item8">
               <p>Funds:1500 TRY {user}</p>

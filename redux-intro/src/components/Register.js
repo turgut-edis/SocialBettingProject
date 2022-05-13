@@ -96,11 +96,6 @@ export default function Register() {
       <span class="bar"></span>
       <label>Retype your Password</label>
     </div>
-    
-    
-    
-
-
                         <button type="submit" class="form-button button-l margin-b">Sign Up as Normal User</button>
                         <button type="submit" class="form-button button-l margin-b">Sign Up as Editor</button>
                   

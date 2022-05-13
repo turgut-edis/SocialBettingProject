@@ -9,6 +9,11 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import Login from "./components/Login";
 import Register from "./components/Register";
 import HomePage from './components/HomePage';
+import SocialPage from './components/SocialPage';
+import Raffle from './components/RafflePage';
+import Profile from './components/ProfilePage';
+
+
 
 import {
   BrowserRouter as Router,
@@ -32,6 +37,9 @@ import {
       <Route path="/" element={<Login/>} />
       <Route path="/register" element={<Register/>} />
       <Route path="/homepage" element={<HomePage/>} />
+      <Route path="/socialpage" element={<SocialPage/>} />
+      <Route path="/raffle" element={<Raffle/>} />
+      <Route path="/profilepage" element={<Profile/>} />
       </Routes>
       </div>
     </div>

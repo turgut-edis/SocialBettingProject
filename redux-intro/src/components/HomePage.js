@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import logo from './image/clipart442066.png'
 import "./csscomponents/components.css";
+
 import {
     BrowserRouter as Router,
     Routes,
@@ -21,6 +23,7 @@ export default function HomePage() {
   function handleSubmit(event) {
     event.preventDefault();
   }
+  
 
   return (
     <body>
@@ -63,12 +66,40 @@ export default function HomePage() {
     <div class="right-rect">
         My Betslips
     </div>
-    <div class="left-rect">
-        UEFA Champions League
+    <div class="right-rect2">
+    <img src={logo} className="logo" alt="logo" />
+        Galatasaray - Real Madrid 
+        <div class= "txtforball">2</div>
+        <div class="txtforball2">MS:2 Odd:2.5</div>
         
-        <table id="dtHorizontalVerticalExample" class="table table-striped table-bordered table-sm " cellspacing="0"
+    </div>
+    <div class="right-rect3">
+    <img src={logo} className="logo" alt="logo" />
+    Fenerbahçe - Beşiktaş 
+        <div class= "txtforball">5</div>
+        <div class="txtforball2">FH/MR: 0/X RC:2</div>
+        <div class="txtforball3">Odd: 11.9</div>
+    </div>
+    
+    
+    <div class="left-rect">
+    <nav class="navHomeTable">
+	<a href="#all">All</a>
+	<a href="#football">Football</a>
+	<a href="#basketball">Basketball</a>
+	<a href="#tennis">Tennis</a>
+	<a href="#contact">Contact</a>
+	<div class="animation start-home"></div>
+</nav>
+
+        <div class="navt">UEFA Champions League</div>
+        
+        
+        
+        <table id="all" class="table table-striped table-bordered table-sm " cellspacing="0"
   width="100%">
   <thead>
+ 
     <tr>
       <th>First name</th>
       <th>Last name</th>
@@ -150,6 +181,7 @@ export default function HomePage() {
     </tr>
   </tbody>
 </table>
+
     </div>
     
 </body>

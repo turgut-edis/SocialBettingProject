@@ -641,6 +641,13 @@ background-color: #e67e22;
   height: 25px;
   width: 100%;
   align-items: flex-end;
+  color: black;
+}
+.comment_type_input:focus{
+  height: 25px;
+  width: 100%;
+  align-items: flex-end;
+  color: black;
 }
 .comment_tt{
   font-style: italic;

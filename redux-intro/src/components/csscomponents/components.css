@@ -599,15 +599,15 @@ background-color: #e67e22;
   border-style: solid;
   margin-right: 25%;
   height: 70px;
+  margin-top: 2px;
   
 }
 .shared-betslip-stat{
   border-color: #424242;
   border-style: solid;
-  margin-left: 75%;
+  margin-left: 76%;
   margin-top: -140px;
-  height: 180px;
-
+  height: 140px;
 }
 .ball-logo{
   height: 20px;
@@ -631,7 +631,25 @@ background-color: #e67e22;
   align-items: center;
   text-align: center;
 }
-
+.shared-betslip-comments{
+  border-color: #424242;
+  border-style: solid;
+  margin-top: 2px;
+  height: 85px;
+}
+.comment_type_input{
+  height: 25px;
+  width: 100%;
+  align-items: flex-end;
+}
+.comment_tt{
+  font-style: italic;
+}
+.like-pic-comment{
+  margin-left: 10px;
+  height: 15px;
+  width: 15px;
+}
 
 
 

@@ -7,6 +7,8 @@ import userpic from './image/userpic.png'
 import logo from './image/clipart442066.png'
 import like_icon from './image/like-button.png'
 import comment from './image/comment.png'
+import trash_icon from './image/trash-347.png'
+import share_icon from './image/share-this-2600.png'
 
 
 import {
@@ -32,6 +34,11 @@ var comment_owner = "Turgut";
 var comment_text = "Great job my boi!";
 var comment_text2 = "LOOOOOGNNGNGNG COMMENT   sdjfhsfksdfjsdf!";
 var comment_like_cnt = "3";
+var mbn = "2";
+var max_winning = "270";
+var total_odd = "10.54";
+
+
 
 
 export default function SocialPage() {
@@ -93,15 +100,15 @@ export default function SocialPage() {
                   <div className="shared-betslip">
                     <img src={logo} className="ball-logo" alt="ball" />
                     <a> {team1} - {team2} </a>
-                    <h6 className="mac_id_spacing">{mac_id} 
-                    <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
+                    <h6 className="mac_id_spacing">{mac_id}
+                      <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
                     </h6>
                   </div>
                   <div className="shared-betslip">
                     <img src={logo} className="ball-logo" alt="ball" />
                     <a> {team1} - {team2} </a>
-                    <h6 className="mac_id_spacing">{mac_id} 
-                    <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
+                    <h6 className="mac_id_spacing">{mac_id}
+                      <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
                     </h6>
                   </div>
                   <div className="shared-betslip-stat">
@@ -146,121 +153,15 @@ export default function SocialPage() {
                   <div className="shared-betslip">
                     <img src={logo} className="ball-logo" alt="ball" />
                     <a> {team1} - {team2} </a>
-                    <h6 className="mac_id_spacing">{mac_id} 
-                    <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
+                    <h6 className="mac_id_spacing">{mac_id}
+                      <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
                     </h6>
                   </div>
                   <div className="shared-betslip">
                     <img src={logo} className="ball-logo" alt="ball" />
                     <a> {team1} - {team2} </a>
-                    <h6 className="mac_id_spacing">{mac_id} 
-                    <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
-                    </h6>
-                  </div>
-                  <div className="shared-betslip-stat">
-                    <p className="shared-betslip-tot-match">Total Matches</p>
-                    <p className="shared-betslip-tot-match-cnt">{shared_match_cnt}</p>
-                    <p className="shared-betslip-tot-match">Total Odd</p>
-                    <p className="shared-betslip-tot-match-cnt">{shared_slip_total_odd}</p>
-                  </div>
-                  <div className="shared-betslip-comments">
-                    <div>
-                      <img src={comment} className="ball-logo" alt="comment" />
-                      <span className="comment_tt"> {comment_owner}: "{comment_text}"</span>
-                      <img src={like_icon} className="like-pic-comment" alt="likebtn" />
-                      <a>  {comment_like_cnt}</a>
-                      <p></p>
-                    </div>
-                    <div>
-                      <img src={comment} className="ball-logo" alt="comment" />
-                      <span className="comment_tt"> {comment_owner}: "{comment_text2} "</span>
-                      <img src={like_icon} className="like-pic-comment" alt="likebtn" />
-                      <a>  {comment_like_cnt}</a>
-                      <p></p>
-                    </div>
-                  </div>
-                  <div className="comment_type_area">
-                    <input type="text" className="comment_type_input" placeholder="Type your comment here..." />
-                  </div>
-
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </CardGroup>
-          <CardGroup>
-            <Card border="primary" style={{ height: '25rem' }}>
-              <Card.Body>
-                <Card.Text as="h6">
-                  <img src={userpic} className="user-picture" alt="user" />
-                  <a>  {username}</a>
-                  <img src={like_icon} className="like-pic" alt="likebtn" />
-                  <a>  {likecnt}</a>
-                  <Button variant="primary" className="betslip-use">Use This Betslip</Button>
-                  <p> </p>
-                  <div className="shared-betslip">
-                    <img src={logo} className="ball-logo" alt="ball" />
-                    <a> {team1} - {team2} </a>
-                    <h6 className="mac_id_spacing">{mac_id} 
-                    <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
-                    </h6>
-                  </div>
-                  <div className="shared-betslip">
-                    <img src={logo} className="ball-logo" alt="ball" />
-                    <a> {team1} - {team2} </a>
-                    <h6 className="mac_id_spacing">{mac_id} 
-                    <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
-                    </h6>
-                  </div>
-                  <div className="shared-betslip-stat">
-                    <p className="shared-betslip-tot-match">Total Matches</p>
-                    <p className="shared-betslip-tot-match-cnt">{shared_match_cnt}</p>
-                    <p className="shared-betslip-tot-match">Total Odd</p>
-                    <p className="shared-betslip-tot-match-cnt">{shared_slip_total_odd}</p>
-                  </div>
-                  <div className="shared-betslip-comments">
-                    <div>
-                      <img src={comment} className="ball-logo" alt="comment" />
-                      <span className="comment_tt"> {comment_owner}: "{comment_text}"</span>
-                      <img src={like_icon} className="like-pic-comment" alt="likebtn" />
-                      <a>  {comment_like_cnt}</a>
-                      <p></p>
-                    </div>
-                    <div>
-                      <img src={comment} className="ball-logo" alt="comment" />
-                      <span className="comment_tt"> {comment_owner}: "{comment_text2} "</span>
-                      <img src={like_icon} className="like-pic-comment" alt="likebtn" />
-                      <a>  {comment_like_cnt}</a>
-                      <p></p>
-                    </div>
-                  </div>
-                  <div className="comment_type_area">
-                    <input type="text" className="comment_type_input" placeholder="Type your comment here..." />
-                  </div>
-
-                </Card.Text>
-              </Card.Body>
-            </Card>
-            <Card border="primary" style={{ height: '25rem' }}>
-              <Card.Body>
-                <Card.Text as="h6">
-                  <img src={userpic} className="user-picture" alt="user" />
-                  <a>  {username}</a>
-                  <img src={like_icon} className="like-pic" alt="likebtn" />
-                  <a>  {likecnt}</a>
-                  <Button variant="primary" className="betslip-use">Use This Betslip</Button>
-                  <p> </p>
-                  <div className="shared-betslip">
-                    <img src={logo} className="ball-logo" alt="ball" />
-                    <a> {team1} - {team2} </a>
-                    <h6 className="mac_id_spacing">{mac_id} 
-                    <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
-                    </h6>
-                  </div>
-                  <div className="shared-betslip">
-                    <img src={logo} className="ball-logo" alt="ball" />
-                    <a> {team1} - {team2} </a>
-                    <h6 className="mac_id_spacing">{mac_id} 
-                    <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
+                    <h6 className="mac_id_spacing">{mac_id}
+                      <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
                     </h6>
                   </div>
                   <div className="shared-betslip-stat">
@@ -306,15 +207,15 @@ export default function SocialPage() {
                   <div className="shared-betslip">
                     <img src={logo} className="ball-logo" alt="ball" />
                     <a> {team1} - {team2} </a>
-                    <h6 className="mac_id_spacing">{mac_id} 
-                    <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
+                    <h6 className="mac_id_spacing">{mac_id}
+                      <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
                     </h6>
                   </div>
                   <div className="shared-betslip">
                     <img src={logo} className="ball-logo" alt="ball" />
                     <a> {team1} - {team2} </a>
-                    <h6 className="mac_id_spacing">{mac_id} 
-                    <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
+                    <h6 className="mac_id_spacing">{mac_id}
+                      <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
                     </h6>
                   </div>
                   <div className="shared-betslip-stat">
@@ -358,15 +259,15 @@ export default function SocialPage() {
                   <div className="shared-betslip">
                     <img src={logo} className="ball-logo" alt="ball" />
                     <a> {team1} - {team2} </a>
-                    <h6 className="mac_id_spacing">{mac_id} 
-                    <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
+                    <h6 className="mac_id_spacing">{mac_id}
+                      <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
                     </h6>
                   </div>
                   <div className="shared-betslip">
                     <img src={logo} className="ball-logo" alt="ball" />
                     <a> {team1} - {team2} </a>
-                    <h6 className="mac_id_spacing">{mac_id} 
-                    <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
+                    <h6 className="mac_id_spacing">{mac_id}
+                      <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
                     </h6>
                   </div>
                   <div className="shared-betslip-stat">
@@ -412,15 +313,15 @@ export default function SocialPage() {
                   <div className="shared-betslip">
                     <img src={logo} className="ball-logo" alt="ball" />
                     <a> {team1} - {team2} </a>
-                    <h6 className="mac_id_spacing">{mac_id} 
-                    <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
+                    <h6 className="mac_id_spacing">{mac_id}
+                      <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
                     </h6>
                   </div>
                   <div className="shared-betslip">
                     <img src={logo} className="ball-logo" alt="ball" />
                     <a> {team1} - {team2} </a>
-                    <h6 className="mac_id_spacing">{mac_id} 
-                    <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
+                    <h6 className="mac_id_spacing">{mac_id}
+                      <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
                     </h6>
                   </div>
                   <div className="shared-betslip-stat">
@@ -464,15 +365,121 @@ export default function SocialPage() {
                   <div className="shared-betslip">
                     <img src={logo} className="ball-logo" alt="ball" />
                     <a> {team1} - {team2} </a>
-                    <h6 className="mac_id_spacing">{mac_id} 
-                    <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
+                    <h6 className="mac_id_spacing">{mac_id}
+                      <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
                     </h6>
                   </div>
                   <div className="shared-betslip">
                     <img src={logo} className="ball-logo" alt="ball" />
                     <a> {team1} - {team2} </a>
-                    <h6 className="mac_id_spacing">{mac_id} 
-                    <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
+                    <h6 className="mac_id_spacing">{mac_id}
+                      <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
+                    </h6>
+                  </div>
+                  <div className="shared-betslip-stat">
+                    <p className="shared-betslip-tot-match">Total Matches</p>
+                    <p className="shared-betslip-tot-match-cnt">{shared_match_cnt}</p>
+                    <p className="shared-betslip-tot-match">Total Odd</p>
+                    <p className="shared-betslip-tot-match-cnt">{shared_slip_total_odd}</p>
+                  </div>
+                  <div className="shared-betslip-comments">
+                    <div>
+                      <img src={comment} className="ball-logo" alt="comment" />
+                      <span className="comment_tt"> {comment_owner}: "{comment_text}"</span>
+                      <img src={like_icon} className="like-pic-comment" alt="likebtn" />
+                      <a>  {comment_like_cnt}</a>
+                      <p></p>
+                    </div>
+                    <div>
+                      <img src={comment} className="ball-logo" alt="comment" />
+                      <span className="comment_tt"> {comment_owner}: "{comment_text2} "</span>
+                      <img src={like_icon} className="like-pic-comment" alt="likebtn" />
+                      <a>  {comment_like_cnt}</a>
+                      <p></p>
+                    </div>
+                  </div>
+                  <div className="comment_type_area">
+                    <input type="text" className="comment_type_input" placeholder="Type your comment here..." />
+                  </div>
+
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </CardGroup>
+          <CardGroup>
+            <Card border="primary" style={{ height: '25rem' }}>
+              <Card.Body>
+                <Card.Text as="h6">
+                  <img src={userpic} className="user-picture" alt="user" />
+                  <a>  {username}</a>
+                  <img src={like_icon} className="like-pic" alt="likebtn" />
+                  <a>  {likecnt}</a>
+                  <Button variant="primary" className="betslip-use">Use This Betslip</Button>
+                  <p> </p>
+                  <div className="shared-betslip">
+                    <img src={logo} className="ball-logo" alt="ball" />
+                    <a> {team1} - {team2} </a>
+                    <h6 className="mac_id_spacing">{mac_id}
+                      <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
+                    </h6>
+                  </div>
+                  <div className="shared-betslip">
+                    <img src={logo} className="ball-logo" alt="ball" />
+                    <a> {team1} - {team2} </a>
+                    <h6 className="mac_id_spacing">{mac_id}
+                      <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
+                    </h6>
+                  </div>
+                  <div className="shared-betslip-stat">
+                    <p className="shared-betslip-tot-match">Total Matches</p>
+                    <p className="shared-betslip-tot-match-cnt">{shared_match_cnt}</p>
+                    <p className="shared-betslip-tot-match">Total Odd</p>
+                    <p className="shared-betslip-tot-match-cnt">{shared_slip_total_odd}</p>
+                  </div>
+                  <div className="shared-betslip-comments">
+                    <div>
+                      <img src={comment} className="ball-logo" alt="comment" />
+                      <span className="comment_tt"> {comment_owner}: "{comment_text}"</span>
+                      <img src={like_icon} className="like-pic-comment" alt="likebtn" />
+                      <a>  {comment_like_cnt}</a>
+                      <p></p>
+                    </div>
+                    <div>
+                      <img src={comment} className="ball-logo" alt="comment" />
+                      <span className="comment_tt"> {comment_owner}: "{comment_text2} "</span>
+                      <img src={like_icon} className="like-pic-comment" alt="likebtn" />
+                      <a>  {comment_like_cnt}</a>
+                      <p></p>
+                    </div>
+                  </div>
+                  <div className="comment_type_area">
+                    <input type="text" className="comment_type_input" placeholder="Type your comment here..." />
+                  </div>
+
+                </Card.Text>
+              </Card.Body>
+            </Card>
+            <Card border="primary" style={{ height: '25rem' }}>
+              <Card.Body>
+                <Card.Text as="h6">
+                  <img src={userpic} className="user-picture" alt="user" />
+                  <a>  {username}</a>
+                  <img src={like_icon} className="like-pic" alt="likebtn" />
+                  <a>  {likecnt}</a>
+                  <Button variant="primary" className="betslip-use">Use This Betslip</Button>
+                  <p> </p>
+                  <div className="shared-betslip">
+                    <img src={logo} className="ball-logo" alt="ball" />
+                    <a> {team1} - {team2} </a>
+                    <h6 className="mac_id_spacing">{mac_id}
+                      <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
+                    </h6>
+                  </div>
+                  <div className="shared-betslip">
+                    <img src={logo} className="ball-logo" alt="ball" />
+                    <a> {team1} - {team2} </a>
+                    <h6 className="mac_id_spacing">{mac_id}
+                      <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
                     </h6>
                   </div>
                   <div className="shared-betslip-stat">
@@ -513,50 +520,72 @@ export default function SocialPage() {
                 <Card>
                   <Card.Header as="h5">MyBetslip</Card.Header>
                   <Card.Body>
-                    <Card.Title>Special title treatment</Card.Title>
-                    <Card.Text>
-                      With supporting text below as a natural lead-in to additional content.
-                    </Card.Text>
-                    <Button variant="primary">Go somewhere</Button>
+                    <div className="rightpanel-betslip">
+                      <h6><img src={logo} className="ball-logo" alt="ball" /><span> {team1} - {team2} </span></h6>
+                      <h6 className="mac_id_spacing">{mac_id}
+                        <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
+                      </h6>
+                    </div>
                   </Card.Body>
                 </Card>
               </CardGroup>
               <Card>
                 <Card.Body>
-                  <Card.Title>Special title treatment</Card.Title>
-                  <Card.Text>
-                    With supporting text below as a natural lead-in to additional content.
-                  </Card.Text>
-                  <Button variant="primary">Go somewhere</Button>
+                  <div className="rightpanel-betslip">
+                    <h6><img src={logo} className="ball-logo" alt="ball" /><span> {team1} - {team2} </span></h6>
+                    <h6 className="mac_id_spacing">{mac_id}
+                      <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
+                    </h6>
+                  </div>
                 </Card.Body>
               </Card>
               <Card>
                 <Card.Body>
-                  <Card.Title>Special title treatment</Card.Title>
-                  <Card.Text>
-                    With supporting text below as a natural lead-in to additional content.
-                  </Card.Text>
-                  <Button variant="primary">Go somewhere</Button>
+                  <div className="rightpanel-betslip">
+                    <h6><img src={logo} className="ball-logo" alt="ball" /><span> {team1} - {team2} </span></h6>
+                    <h6 className="mac_id_spacing">{mac_id}
+                      <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
+                    </h6>
+                  </div>
                 </Card.Body>
               </Card>
               <Card>
                 <Card.Body>
-                  <Card.Title>Special title treatment</Card.Title>
-                  <Card.Text>
-                    With supporting text below as a natural lead-in to additional content.
-                  </Card.Text>
-                  <Button variant="primary">Go somewhere</Button>
+                  <div className="rightpanel-betslip">
+                    <h6><img src={logo} className="ball-logo" alt="ball" /><span> {team1} - {team2} </span></h6>
+                    <h6 className="mac_id_spacing">{mac_id}
+                      <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
+                    </h6>
+                  </div>
                 </Card.Body>
               </Card>
               <Card>
                 <Card.Body>
-                  <Card.Title>Special title treatment</Card.Title>
-                  <Card.Text>
-                    With supporting text below as a natural lead-in to additional content.
-                  </Card.Text>
-                  <Button variant="primary">Go somewhere</Button>
+                  <div className="rightpanel-betslip">
+                    <h6><img src={logo} className="ball-logo" alt="ball" /><span> {team1} - {team2} </span></h6>
+                    <h6 className="mac_id_spacing">{mac_id}
+                      <span className="match-info-space">MS: {mac_sonu} Odd: {odd}</span>
+                    </h6>
+                  </div>
                 </Card.Body>
               </Card>
+              <div className="betslip-checkout-card">
+                  <Card>
+                    <Card.Body>
+                      <div className="rightpanel-checkout">
+                        <h6 className="checkout">MBN: {mbn}</h6>
+                        <h6 className="checkout">Max Winning: TRY{max_winning}</h6>
+                      </div>
+                      <div>
+                      <h6>Total Odd: {total_odd}</h6>
+                      <input id ="amount_bet" type="text" className="input-lower" placeholder="Enter an amount..." />
+                      <img src={trash_icon} className="lower-icon" alt="delete" onclick="trash()" />
+                      <img src={share_icon} className="lower-icon" alt="share" onclick="share()" />
+                      <Button variant="success" className="checkout-button" onclick="place_bet(amount_bet)">Place Bet</Button>
+                      </div>
+                    </Card.Body>
+                  </Card>
+              </div>
             </div>
           </div>
         </div>

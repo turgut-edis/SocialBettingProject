@@ -657,7 +657,57 @@ background-color: #e67e22;
   height: 15px;
   width: 15px;
 }
+.betslip-container{
+  height: 1100px;
+}
+.rightpanel-betslip{
+  height: auto;
+  margin-top: 2px;
+}
 
+.betslip-checkout-card{
+  height: 215px;
+  margin-top: 400px;
+  width: 100%;
+  background-color: #E9967A;
+  border-color: #616161;
+  border-style: solid;
+  font-size: 0;
+  background-color: white;
+}
+.checkout{
+  font-weight: bold;
+}
+.rightpanel-checkout{
+  height: auto;
+  margin-top: 2px;
+}
+.input-lower{
+  width: 80%;
+}
+.input-lower:focus{
+  height: 25px;
+  width: 100%;
+  align-items: flex-end;
+  color: black;
+}
+.lower-icon{
+  margin-top: 5%;
+  height: 24px;
+  width: 24px;
+  margin-right: 10px;
+
+}
+.checkout-button{
+  margin-top: 10px;
+  margin-left: 10px;
+}
+.button:before{
+  content:"🗑";
+}
+.button{
+  height: 20px;
+}
 
 
 

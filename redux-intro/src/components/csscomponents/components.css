@@ -162,9 +162,10 @@ body {
 
 .container-content {
   border: 5px solid #FFFF00;
-  position: fixed;
+  position: absolute;
+  left: 50%;
   top: 50%;
-  left:75%;
+  transform: translate(-50%, -50%);
   border-color: orange;
   border-image: none;
   border-style: solid solid none;

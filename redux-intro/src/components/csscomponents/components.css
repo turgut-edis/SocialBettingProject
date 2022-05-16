@@ -705,7 +705,7 @@ background-color: #e67e22;
 }
 
 .raffle-container{
-  position: static;
+  position: relative;
   width: 2100px;
   height: 1200px;
   margin-top: 50px;
@@ -716,7 +716,7 @@ background-color: #e67e22;
 }
 .raffle-cart{
   width: 15%;
-  position: absolute;
+  position: relative;
   margin-top: -1000px;
   left: 1740px;
   border: 3px solid black;

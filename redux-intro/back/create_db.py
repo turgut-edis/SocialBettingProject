@@ -22,7 +22,7 @@ my_cursor.execute("DROP TABLE IF EXISTS buys, edits, shared_slip, like_comment, 
 
 #student_Table = "CREATE TABLE student " + "(sid CHAR(12)," + "sname VARCHAR(50) NOT NULL," + "bdate DATE NOT NULL," + "address VARCHAR(50) NOT NULL," + "scity VARCHAR(20) NOT NULL," + "year CHAR(20) NOT NULL," + "gpa FLOAT NOT NULL," + "nationality VARCHAR(20) NOT NULL," + "PRIMARY KEY(sid))"
 
-user = "CREATE TABLE user( user_ID INT, username VARCHAR(16) NOT NULL UNIQUE, password VARCHAR(16) NOT NULL, name VARCHAR(20) NOT NULL, surname VARCHAR(20) NOT NULL, birth_year INT NOT NULL, mail VARCHAR(255) NOT NULL UNIQUE, PRIMARY KEY(user_ID) )"
+user = "CREATE TABLE user( user_ID INT AUTO_INCREMENT, username VARCHAR(16) NOT NULL UNIQUE, password VARCHAR(16) NOT NULL, name VARCHAR(20) NOT NULL, surname VARCHAR(20) NOT NULL, birth_year INT NOT NULL, mail VARCHAR(255) NOT NULL UNIQUE, PRIMARY KEY(user_ID) )"
 
 normal_user = "CREATE TABLE normal_user( n_user_ID INT, balance INT, winning_cnt INT, address VARCHAR (2000), coupons INT, PRIMARY KEY (n_user_ID), FOREIGN KEY (n_user_ID) REFERENCES slip_creator(creator_ID) ON DELETE CASCADE )"
 
@@ -72,10 +72,10 @@ FOREIGN KEY (admin_ID) REFERENCES \
 user(user_ID) ON DELETE CASCADE \
 )"
 
-bet = "CREATE TABLE bet( bet_ID INT, match_ID INT, mbn INT, ratio FLOAT (2,2), change_date TIMESTAMP, bet_type VARCHAR(30), active BOOLEAN, result VARCHAR(10), PRIMARY KEY (bet_ID, match_ID), FOREIGN KEY (match_ID) REFERENCES matches(match_ID) ON DELETE CASCADE ON UPDATE CASCADE, CHECK (result IN ('WON', 'RESULT', 'PENDING')) )"
+bet = "CREATE TABLE bet( bet_ID INT AUTO_INCREMENT, match_ID INT, mbn INT, ratio FLOAT (2,2), change_date TIMESTAMP, bet_type VARCHAR(30), active BOOLEAN, result VARCHAR(10), PRIMARY KEY (bet_ID, match_ID), FOREIGN KEY (match_ID) REFERENCES matches(match_ID) ON DELETE CASCADE ON UPDATE CASCADE, CHECK (result IN ('WON', 'LOST', 'PENDING')) )"
 
 bet_slip = "CREATE TABLE bet_slip(\
-bet_slip_ID INT, \
+bet_slip_ID INT AUTO_INCREMENT, \
 creator_ID INT, \
 bet_count INT, \
 total_amount INT, \
@@ -85,7 +85,7 @@ FOREIGN KEY (creator_ID) REFERENCES slip_creator(creator_ID) \
 )"
 
 comments = "CREATE TABLE comments( \
-comment_ID INT, \
+comment_ID INT AUTO_INCREMENT, \
 user_ID INT, \
 comment VARCHAR(20000), \
 comment_date TIMESTAMP, \
@@ -97,7 +97,7 @@ CASCADE \
 )"
 
 item_coupon = "CREATE TABLE item_coupon( \
-item_ID INT, \
+item_ID INT AUTO_INCREMENT, \
 description VARCHAR(2000), \
 coupon_amount INT, \
 coupon_count INT, \
@@ -106,7 +106,7 @@ PRIMARY KEY (item_ID) \
 )"
 
 matches = "CREATE TABLE matches( \
-match_ID INT, \
+match_ID INT AUTO_INCREMENT, \
 start_date TIMESTAMP, \
 contest_ID INT, \
 season VARCHAR(20), \
@@ -122,7 +122,7 @@ UPDATE CASCADE \
 )"
 
 results = "CREATE TABLE results( \
-result_ID INT, \
+result_ID INT AUTO_INCREMENT, \
 match_ID INT, \
 home_score INT, \
 away_score INT, \
@@ -134,6 +134,7 @@ UPDATE CASCADE \
 
 volleyball_results = "CREATE TABLE volleyball_results( \
 v_result_ID INT, \
+total_score INT, \
 home_set_score INT, \
 away_set_score INT, \
 PRIMARY KEY(v_result_ID), \
@@ -212,7 +213,7 @@ PRIMARY KEY(sport_name) \
 )"
 
 contest = "CREATE TABLE contest( \
-contest_ID INT, \
+contest_ID INT AUTO_INCREMENT, \
 sport_name VARCHAR(15), \
 name VARCHAR(30), \
 season VARCHAR(20), \
@@ -222,7 +223,7 @@ sports(sport_name) ON DELETE CASCADE ON UPDATE CASCADE \
 )"
 
 competitors = "CREATE TABLE competitors( \
-competitor_ID INT, \
+competitor_ID INT AUTO_INCREMENT, \
 team_name VARCHAR(50), \
 win_rate FLOAT, \
 colors VARCHAR(30), \

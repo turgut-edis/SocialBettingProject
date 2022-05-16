@@ -702,11 +702,82 @@ background-color: #e67e22;
   margin-top: 10px;
   margin-left: 10px;
 }
-.button:before{
-  content:"🗑";
+
+.raffle-container{
+  position: static;
+  width: 2100px;
+  height: 1200px;
+  margin-top: 50px;
+  margin-left: -385px;
+  font-size: 0;
+  padding: 1%;
+  background-color: white;
 }
-.button{
-  height: 20px;
+.raffle-cart{
+  width: 15%;
+  position: absolute;
+  margin-top: -1000px;
+  left: 1740px;
+  border: 3px solid black;
+}
+.raffle-checkout-card{
+  height: 115px;
+  margin-top: 600px;
+  width: 100%;
+  background-color: #E9967A;
+  border-top: 1px solid black;
+  font-size: 0;
+  background-color: white;
+}
+
+.raffle-content{
+  border-style: solid;
+  border-color: #616161;
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 2px;
+  height: 1000px;
+  width: 83%;
+  font-size: 0;
+  padding: 1%;
+  background-color: white;
+}
+.raffle_card{
+  border: 2px solid black;
+  border-radius: 1rem;
+}
+.raffle-name{
+  text-align: center;
+}
+.raffle_img{
+  height: 50%;
+  width: 70%;
+  align-self: center;
+}
+.raffle-price{
+  text-align: center;
+  margin-top: 20px;
+  font-weight: 700;
+}
+.raffle-button{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  align-self: center;
+  margin-left: 32%;
+  justify-content: center;
+}
+.raffle-date{
+  text-align: center;
+  margin-top: 10px;
+  align-self: center;
+  align-items: center;
+}
+.raffle-logo{
+  height: 50px;
+  width: 70px;
+}
+.raffle-info{
+margin-left: 30%;
 }
 
 

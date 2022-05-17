@@ -11,14 +11,20 @@ tr {
 
 th {
   color: #ffffff;
-  padding: 5px 10px 5px 40px;
+  padding: 5px 10px 5px 10px;
   background-color: #616161;
+  border: 1px solid black;
+  text-align: center;
+
 
 }
 
 td {
   background-color: #dedede;
   padding: 5px 40px 5px 40px;
+  border: 1px solid black;
+  text-align: center;
+
   
 }
 

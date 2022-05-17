@@ -1,21 +1,28 @@
 import mysql.connector
 
+''' mydb = mysql.connector.connect(
+  host="localhost",
+  user="root",
+  passwd = "password123"
+)
+my_cursor = mydb.cursor()
+
+my_cursor.execute("CREATE DATABASE db_project") '''
+
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
   passwd = "password123",
-  db="our_users",
+  db = "db_project"
 )
-
-#my_cursor.execute("CREATE DATABASE our_users")
-
 my_cursor = mydb.cursor()
+
 
 my_cursor.execute("DROP TABLE IF EXISTS buys, edits, shared_slip, like_comment, \
                    plays, banned_editors, placed_on, banned_users, competitor_contest, \
                    bet_slip_comment, match_comment, team, esports_team, competitors,\
                    lol_results, football_results, basketball_results, volleyball_results,\
-                   results, item_coupon, comments, bet_slip, bet, matches, contest,\
+                   results, item_coupon, comments, bet_slip_like, bet_slip, suggested_bet, bet, matches, contest,\
                    sports, editor_request, normal_user_follows, normal_user_friend,\
                    editor, normal_user, slip_creator, admin, user")
 
@@ -113,8 +120,8 @@ season VARCHAR(20), \
 sport_name VARCHAR(15), \
 PRIMARY KEY(match_ID), \
 FOREIGN KEY(contest_ID, season, sport_name) \
-REFERENCES contest(contest_ID, sport_name, \
-season) ON DELETE CASCADE ON UPDATE \
+REFERENCES contest(contest_ID, season, \
+sport_name) ON DELETE CASCADE ON UPDATE \
 CASCADE, \
 FOREIGN KEY(sport_name) REFERENCES \
 sports(sport_name) ON DELETE CASCADE ON \
@@ -256,6 +263,18 @@ bet_slip(bet_slip_ID) ON DELETE CASCADE ON \
 UPDATE CASCADE \
 )"
 
+
+
+suggested_bet = "CREATE TABLE suggested_bet( \
+editor_ID INT, \
+bet_ID INT, \
+match_ID INT, \
+comment VARCHAR(2000), \
+PRIMARY KEY(editor_ID, bet_ID), \
+FOREIGN KEY(editor_ID) REFERENCES editor(editor_ID) ON DELETE CASCADE ON UPDATE CASCADE, \
+FOREIGN KEY(bet_ID, match_ID) REFERENCES bet(bet_ID, match_ID) ON DELETE CASCADE ON UPDATE CASCADE \
+)"
+
 competitor_contest = "CREATE TABLE competitor_contest( \
 competitor_ID INT, \
 contest_ID INT, \
@@ -335,6 +354,13 @@ comments(comment_ID) ON DELETE CASCADE ON \
 UPDATE CASCADE \
 )" \
 
+bet_slip_like = "CREATE TABLE bet_slip_like( \
+n_user_ID INT, \
+bet_slip_ID INT, \
+PRIMARY KEY(n_user_ID, bet_slip_ID), \
+FOREIGN KEY(n_user_ID) REFERENCES normal_user(n_user_ID) ON DELETE CASCADE ON UPDATE CASCADE, \
+FOREIGN KEY(bet_slip_ID) REFERENCES bet_slip(bet_slip_ID) ON DELETE CASCADE ON UPDATE CASCADE)"
+
 shared_slip = "CREATE TABLE shared_slip( \
 bet_slip_ID INT, \
 sharer_ID INT, \
@@ -385,7 +411,9 @@ my_cursor.execute(sports)
 my_cursor.execute(contest)
 my_cursor.execute(matches)
 my_cursor.execute(bet)
+my_cursor.execute(suggested_bet)
 my_cursor.execute(bet_slip)
+my_cursor.execute(bet_slip_like)
 my_cursor.execute(comments)
 my_cursor.execute(item_coupon)
 my_cursor.execute(results)
@@ -408,12 +436,10 @@ my_cursor.execute(shared_slip)
 my_cursor.execute(edits)
 my_cursor.execute(buys)
 
-#my_cursor.execute("DROP TABLE IF EXISTS buys, edits, shared_slip, like_comment, \
-#                   plays, banned_editors, placed_on, banned_users, competitor_contest, \
-#                   bet_slip_comment, match_comment, team, esports_team, competitors,\
-#                   lol_results, football_results, basketball_results, volleyball_results,\
-#                   results, item_coupon, comments, bet_slip, bet, matches, contest,\
-#                   sports, editor_request, normal_user_follows, normal_user_friend,\
-#                   editor, normal_user, slip_creator, admin, user")
+my_cursor.execute("INSERT INTO user(username, password, name, surname, birth_year, mail) VALUES ('admin', 'admin', 'admin', 'admin', 0, 'admin@gmail.com')")
+mydb.commit()
+my_cursor.execute("INSERT INTO admin(admin_ID) VALUES (1)")
+mydb.commit()
+
 
 

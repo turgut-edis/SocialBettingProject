@@ -1,5 +1,6 @@
 import json
 import time
+from turtle import update
 from unittest import result
 from flask import Flask, render_template, request, flash, session, jsonify, redirect
 from flask_cors import CORS
@@ -10,7 +11,7 @@ from random import randint
 app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_DB'] = 'our_users'
+app.config['MYSQL_DB'] = 'db_project'
 app.config['MYSQL_PASSWORD'] = 'password123'
 app.config['MYSQL_USER'] = 'root'
 
@@ -53,13 +54,13 @@ def home():
         filter_query = "WITH s_filter AS ( SELECT match_ID from matches WHERE sport_name = %s), " \
                         "b_filter AS (SELECT match_ID FROM bet WHERE active = TRUE AND mbn <= %s), " \
                         "c_filter AS (SELECT match_ID FROM matches NATURAL JOIN contest WHERE contest.name IN %s), " \
-                        "esport_filter AS (SELECT match_ID FROM plays NATURAL JOIN esports_team WHERE team_name LIKE %s), " \
-                        "team_filter AS (SELECT match_ID FROM plays NATURAL JOIN team WHERE team_name LIKE %s), " \
+                        "esport_filter AS (SELECT match_ID FROM plays NATURAL JOIN competitors NATURAL JOIN esports_team WHERE team_name LIKE %s), " \
+                        "team_filter AS (SELECT match_ID FROM plays NATURAL JOIN competitors NATURAL JOIN team WHERE team_name LIKE %s), " \
                         "competitor_union AS (SELECT match_ID FROM esport_filter UNION TABLE team_filter), "\
                         "final_filter AS (SELECT DISTINCT match_ID FROM s_filter INNER JOIN b_filter USING(match_ID) INNER JOIN c_filter USING(match_ID) INNER JOIN c_filter USING(match_ID) " \
                         "INNER JOIN competitor_union USING(match_ID))"
         continuing_filter = filter_query + ", data AS (SELECT * FROM final_filter NATURAL JOIN matches), " \
-                            "all_competitors AS (SELECT name, id FROM (SELECT competitor_ID AS id, name AS name FROM esports_team) AS tmp UNION (SELECT competitor_ID AS id, team_name AS name FROM team)), " \
+                            "all_competitors AS (SELECT team_name, competitor_ID FROM competitors), " \
                             "curr_competitors AS (SELECT competitor_ID as id, side, match_ID FROM plays NATURAL JOIN final_filter), " \
                             "all_side AS (SELECT name, side, match_ID FROM all_competitors NATURAL JOIN curr_competitors), " \
                             "b_data AS (SELECT * FROM bet NATURAL JOIN final_filter WHERE active = TRUE AND result = 'PENDING') SELECT * FROM data NATURAL JOIN b_data NATURAL JOIN all_side"
@@ -79,11 +80,11 @@ def home():
                 m_found = False
 
                 if r["side"] == "HOME":
-                    home_side = r["competitor_name"]
+                    home_side = r["team_name"]
                     away_side = ""
                 else:
                     home_side = ""
-                    away_side = r["competitor_name"]
+                    away_side = r["team_name"]
 
                 total_ratio = r["ratio"]
                 for m in matches:
@@ -224,15 +225,178 @@ def home():
         else:
             return {"status" : "User_not_found"}
     elif info["request_type"] == "editor_share_betslip":
-        print("Editor Share Bet")
+        select_user_query = "SELECT user_ID FROM user WHERE username = %s"
+        value = (info["username"])
+        execute_select = cursor.execute(select_user_query, value)
+        if execute_select > 0:
+            user_ID = cursor.fetchone()[0]
+            select_bet_slip_query = "SELECT bet_slip_ID FROM bet_slip WHERE isPlayed = FALSE AND creator_ID = %s"
+            value = (user_ID)
+            execute_select_slip = cursor.execute(select_bet_slip_query, value)
+            if execute_select_slip > 0:
+                bet_slip_ID = cursor.fetchone()[0]
+                insert_shared_slip = "INSERT INTO shared_slip (bet_slip_ID, sharer_ID) VALUES (%s, %s)"
+                value = (bet_slip_ID, user_ID)
+                execute_insert_shared = cursor.execute(insert_shared_slip, value)
+                if execute_insert_shared > 0:
+                    
+                    update_slip = "UPDATE bet_slip SET total_amount = 0, isPlayed = TRUE WHERE creator_ID = %s AND bet_slip_ID = %s"
+                    value = (user_ID, bet_slip_ID)
+                    execute_update = cursor.execute(update_slip, value)
+                    if execute_update > 0:
+                        insert_slip = "INSERT INTO bet_slip (creator_ID, bet_count, total_amount, isPlayed) VALUES (%s, 0, 0, FALSE)"
+                        value = (user_ID)
+                        execute_insert = cursor.execute(insert_slip, value)
+                        if execute_insert > 0:
+                            sql.connection.commit()
+                            return {"status" : "success"}
+                        else:
+                            return {"status" : "insert_slip_failed"}
+                    else:
+                        return {"status" : "update_slip_failed"}
+                else:
+                  return {"status" : "share_slip_failed"}
+            else:
+                return {"status" : "select_slip_failed"}
+        else:
+            return {"status" : "select_user_failed"}
+            
     elif info["request_type"] == "suggest_bet":
-        print(" Suggest Bet")
-    elif input["request_type"] == "add_bet_to_betslip":
-        print(" Add Bet")
-    elif input["request_type"] == "remove_bet_from_betslip":
-        print(" Remove Bet")
-    elif input["request_type"] == "display_user_bet_slip":
-        print(" Display")
+        select_user_query = "SELECT user_ID FROM user WHERE username = %s"
+        value = (info["username"])
+        execute_select = cursor.execute(select_user_query, value)
+        if execute_select > 0:
+            user_ID = cursor.fetchone()[0]
+            insert_suggested = "INSERT INTO suggested_bet (editor_ID, bet_ID, match_ID, comment) VALUES (%s, %s, %s, %s)"
+            value = (user_ID, info["bet_ID"], info["match_ID"], info["editor_comment"])
+            execute_insert = cursor.execute(insert_suggested, value)
+            if execute_insert > 0:
+                sql.connection.commit()
+                return {"status" : "success"}
+            else:
+                return {"status" : "suggest_bet_failed"}
+        else:
+            return {"status" : "select_user_failed"}
+            
+    elif info["request_type"] == "add_bet_to_betslip":
+        select_user_query = "SELECT user_ID FROM user WHERE username = %s"
+        value = (info["username"])
+        execute_select = cursor.execute(select_user_query, value)
+        if execute_select > 0:
+            user_ID = cursor.fetchone()[0]
+            select_bet_slip_query = "SELECT bet_slip_ID FROM bet_slip WHERE isPlayed = FALSE AND creator_ID = %s"
+            value = (user_ID)
+            execute_select_slip = cursor.execute(select_bet_slip_query, value)
+            if execute_select_slip > 0:
+                bet_slip_ID = cursor.fetchone()[0]
+                update_bet_cnt = "UPDATE bet_slip SET bet_count = bet_slip.bet_count + 1 WHERE creator_ID = %s AND bet_slip_ID = %s"
+                values = (user_ID, bet_slip_ID)
+                execute_update = cursor.execute(update_bet_cnt, values)
+                if execute_update:
+                    insert_placed_on = "INSERT INTO placed_on (bet_slip_ID, bet_ID, match_ID) VALUES (%s, %s, %s)"
+                    value = (bet_slip_ID, info["bet_ID"], info["match_ID"])
+                    execute_insert = cursor.execute(insert_placed_on, value)
+                    if execute_insert > 0:
+                        sql.connection.commit()
+                        return {"status" : "success"}
+                    else:
+                        return {"status" : "insert_placed_on_failed"}
+                else:
+                    return {"status" : "update_bet_slip_failed"}
+            else:
+                return {"status" : "select_user_failed"}
+        else:
+            return {"status" : "select_user_failed"}
+
+    elif info["request_type"] == "remove_bet_from_betslip":
+        select_user_query = "SELECT user_ID FROM user WHERE username = %s"
+        value = (info["username"])
+        execute_select = cursor.execute(select_user_query, value)
+        if execute_select > 0:
+            user_ID = cursor.fetchone()[0]
+            select_bet_slip_query = "SELECT bet_slip_ID FROM bet_slip WHERE isPlayed = FALSE AND creator_ID = %s"
+            value = (user_ID)
+            execute_select_slip = cursor.execute(select_bet_slip_query, value)
+            if execute_select_slip > 0:
+                bet_slip_ID = cursor.fetchone()[0]
+                update_bet_cnt = "UPDATE bet_slip SET bet_count = bet_slip.bet_count - 1 WHERE creator_ID = %s AND bet_slip_ID = %s"
+                values = (user_ID, bet_slip_ID)
+                execute_update = cursor.execute(update_bet_cnt, values)
+                if execute_update:
+                    insert_placed_on = "DELETE placed_on FROM placed_on WHERE bet_slip_ID = %s AND bet_ID = %s AND match_ID = %s"
+                    value = (bet_slip_ID, info["bet_ID"], info["match_ID"])
+                    execute_insert = cursor.execute(insert_placed_on, value)
+                    if execute_insert > 0:
+                        sql.connection.commit()
+                        return {"status" : "success"}
+                    else:
+                        return {"status" : "insert_placed_on_failed"}
+                else:
+                    return {"status" : "update_bet_slip_failed"}
+            else:
+                return {"status" : "select_user_failed"}
+        else:
+            return {"status" : "select_user_failed"}
+
+    elif info["request_type"] == "display_user_bet_slip":
+        select_bets_query = "WITH user_bet_slips AS (SELECT bet_slip_ID FROM bet_slip WHERE creator_ID = %s AND placed = FALSE), " \
+                            "all_bet_data AS (SELECT * FROM user_bet_slips NATURAL JOIN placed_on NATURAL JOIN bet), " \
+                            "match_data AS (SELECT * FROM all_bet_data NATURAL JOIN plays), all_competitors AS " \
+                            "(SELECT team_name, competitor_id FROM competitors) SELECT * FROM match_data NATURAL JOIN " \
+                            "all_competitors"
+        value = (info["user_ID"])
+        execute_select = cursor.execute(select_bets_query, value)
+        if execute_select > 0:
+            user_bets_results = []
+
+            user_bets_columns = [col[0] for col in cursor.description]
+
+            for row in cursor.fetchall():
+                user_bets_results.append(dict(zip(user_bets_columns, row)))
+
+            user_map = {
+                "user_ID": info["user_ID"],
+                "bets": []
+            }
+
+            for row in user_bets_results:
+                composite_already_added = False
+
+                if row["side"] == "HOME":
+                    home_side = row["team_name"]
+                    away_side = ""
+
+                else:
+                    home_side = ""
+                    away_side = row["team_name"]
+
+                total_ratio = row["ratio"]
+
+                for bet in user_map["bets"]:
+                    if bet["bet_ID"] == row["bet_ID"] and bet["match_ID"] == row["match_ID"]:
+                        composite_already_added = True
+
+                        if bet["home_side"] == "":
+                            bet["home_side"] = row["team_name"]
+                        else:
+                            bet["away_side"] = row["team_name"]
+                if not composite_already_added:
+                    bet_to_add = {
+                        "bet_ID": row["bet_ID"],
+                        "match_ID": row["match_ID"],
+                        "home_side": home_side,
+                        "away_side": away_side,
+                        "result": row["result"],
+                        "mbn": row["mbn"],
+                        "ratio": total_ratio,
+                        "bet_type": row["bet_type"]
+                    }
+                    user_map["bets"].append(bet_to_add)
+
+            return user_map 
+        else:
+            return {"status" : "select_user_failed"}
+        
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
@@ -291,6 +455,238 @@ def signup():
             "username": userInfo.get('username')
         }
         return jsonify({"result": result})
+
+@app.route('/feed', methods=['GET', 'POST'])
+def feed():
+    cursor = sql.connection.cursor()
+    info = request.get_json(force=True)
+
+    if info["request_type"] == "display_shared_bets": #Requires ["user_id"]
+
+        friend_slip_ID_query = "WITH friend_ID_set AS (SELECT friend_ID AS user_ID FROM normal_user_friend \
+                               WHERE user_ID = %s), friend_info AS (SELECT username, user_ID AS sharer_ID FROM friend_ID_set \
+                               NATURAL JOIN user), friend_slip_ID AS (SELECT * FROM (shared_slip NATURAL JOIN (SELECT \
+                               user_ID AS sharer_ID FROM friend_ID_set) AS sharing_user ))"
+        value = (info["user_ID"])
+        comment_query = friend_slip_ID_query + " SELECT bet_slip_ID, comment_ID, comment, username FROM friend_slip_ID NATURAL JOIN bet_slip_comment NATURAL JOIN comments NATURAL JOIN user"
+        execute_query = cursor.execute(comment_query, value)
+        if execute_query:
+            comment_res = []
+
+            comment_columns = [col[0] for col in cursor.description]
+
+            for r in cursor.fetchall():
+                comment_res.append( dict( zip( comment_columns, r ) ) )
+            
+            like_query = friend_slip_ID_query + " SELECT comment_ID, Count(user_ID) as comment_like_count FROM friend_slip_ID NATURAL JOIN bet_slip_comment NATURAL JOIN like_comment GROUP BY comment_ID"
+            execute_like = cursor.execute(like_query, value)
+            if execute_like:
+                
+                comment_like_results = []
+
+                comment_like_columns = [col[0] for col in cursor.description]
+
+                for r in cursor.fetchall():
+                    comment_like_results.append(dict(zip(comment_like_columns, r)))
+                
+                slip_like_query = friend_slip_ID_query + " SELECT bet_slip_ID, Count(bet_slip_ID) as slip_like_count FROM friend_slip_ID NATURAL JOIN bet_slip_like GROUP BY bet_slip_ID"
+                execute_slip_like = cursor.execute(slip_like_query, value)
+                if execute_slip_like:
+                    bet_slip_like_results = []
+
+                    bet_slip_like_columns = [col[0] for col in cursor.description]
+
+                    for r in cursor.fetchall():
+                        bet_slip_like_results.append(dict(zip(bet_slip_like_columns, r)))
+                        
+                        friend_bet_slip_query = friend_slip_ID_query + ", friend_slip_bet AS ( SELECT * FROM (placed_on NATURAL JOIN friend_slip_ID) ), \
+                                                friend_slip_bet_data AS (SELECT * FROM friend_slip_bet NATURAL JOIN bet), match_data AS (SELECT * FROM friend_slip_bet_data NATURAL JOIN plays), \
+                                                all_competitors AS ( SELECT team_name, competitor_ID FROM competitors ) \
+                                                SELECT DISTINCT *  FROM match_data NATURAL JOIN all_competitors NATURAL JOIN (SELECT sharer_ID, username FROM friend_data) AS friend_temp"
+                        execute_f_bet = cursor.execute(friend_bet_slip_query, value)
+                        if execute_f_bet:
+                            
+                            friend_bet_slip_results = []
+
+                            feed_columns = [col[0] for col in cursor.description]
+
+                            for r in cursor.fetchall():
+                                friend_bet_slip_results.append( dict( zip( feed_columns, r ) ) )
+
+                            friend_bet_slip_map = []
+
+                            for row in friend_bet_slip_results:
+                                composite_already_added = False
+                                bet_slip_found = False
+                                friend_found = False
+
+                                if row["side"] == "HOME":
+                                    home_side = row["team_name"]
+                                    away_side = ""
+                                else:
+                                    home_side = ""
+                                    away_side = row["team_name"]
+
+                                total_ratio = row["ratio"]
+                                sharer_ID = row["sharer_ID"]
+
+                                for friend in friend_bet_slip_map:
+                                    if friend["user_ID"] == sharer_ID:
+
+                                        friend_found = True
+                                        for bet_slip in friend["bet_slips"]:
+
+                                            if bet_slip["bet_slip_ID"] == row["bet_slip_ID"]:
+                                                bet_slip_found = True
+                                                for bet in bet_slip["bets"]:
+                                                    if bet["bet_ID"] == row["bet_ID"] and bet["match_ID"] == row["match_ID"]:
+                                                        composite_already_added = True
+
+                                                        if bet["home_side"] == "":
+                                                            bet["home_side"] = row["team_name"]
+                                                        else:
+                                                            bet["away_side"] = row["team_name"]
+                                                if not composite_already_added:
+                                                    bet_to_add = {
+                                                        "bet_ID": row["bet_ID"],
+                                                        "match_ID": row["match_ID"],
+                                                        "home_side": home_side,
+                                                        "away_side": away_side,
+                                                        "ratio": total_ratio,
+                                                        "result": row["result"],
+                                                        "bet_type": row["bet_type"]
+                                                    }
+                                                    bet_slip["bets"].append(bet_to_add)
+
+                                        if not bet_slip_found:
+                                            bets = [{
+                                                "bet_ID": row["bet_ID"],
+                                                "match_ID": row["match_ID"],
+                                                "home_side": home_side,
+                                                "away_side": away_side,
+                                                "ratio": total_ratio,
+                                                "result": row["result"],
+                                                "bet_type": row["bet_type"]
+                                            }]
+                                            friend["bet_slips"].append({
+                                                "bet_slip_ID": row["bet_slip_ID"],
+                                                "bets": bets
+                                            })
+                                if not friend_found:
+                                    friend_to_add = {
+                                        "user_ID": sharer_ID,
+                                        "username": row["username"],
+                                        "bet_slips": []
+                                    }
+
+                                    bets = [{
+                                        "bet_ID": row["bet_ID"],
+                                        "match_ID": row["match_ID"],
+                                        "home_side": home_side,
+                                        "away_side": away_side,
+                                        "ratio": total_ratio,
+                                        "result": row["result"],
+                                        "bet_type": row["bet_type"]
+                                    }]
+
+                                    friend_to_add["bet_slips"].append({
+                                        "bet_slip_ID": row["bet_slip_ID"],
+                                        "bets": bets
+                                    })
+                                    friend_bet_slip_map.append(friend_to_add)
+
+                            comment_map = []
+
+                            for row in comment_res:
+                                bet_slip_found = False
+
+                                comment_to_add = {
+                                    "username": row["username"],
+                                    "comment_ID": row["comment_ID"],
+                                    "comment": row["comment"],
+                                    "comment_like_count": ""
+                                }
+
+                                for liked_comment in comment_like_results:
+                                    if liked_comment["comment_ID"] == comment_to_add["comment_ID"]:
+                                        comment_to_add["comment_like_count"] = liked_comment["comment_like_count"]
+
+                                for bet_slip in comment_map:
+
+                                    if row["bet_slip_ID"] == bet_slip["bet_slip_ID"]:
+                                        bet_slip_found = True
+
+                                        bet_slip["bet_slip_comments"].append(comment_to_add)
+                                if not bet_slip_found:
+                                    comment_map_to_add = {
+                                        "bet_slip_ID": row["bet_slip_ID"],
+                                        "bet_slip_comments": [comment_to_add]
+                                    }
+
+                                    comment_map.append(comment_map_to_add)
+
+                            for friend in friend_bet_slip_map:
+
+                                for friend_bet_slip in friend["bet_slips"]:
+
+                                    for like in bet_slip_like_results:
+                                        if like["bet_slip_ID"] == friend_bet_slip["bet_slip_ID"]:
+                                            friend_bet_slip["like_count"] = like["like_count"]
+
+                                    for bet_slip_comments in comment_map:
+
+                                        if bet_slip_comments["bet_slip_ID"] == friend_bet_slip["bet_slip_ID"]:
+                                            friend_bet_slip["comments"] = bet_slip_comments["bet_slip_comments"]
+
+                            return {"users": friend_bet_slip_map}
+                        else:
+                            return{"status" : "select_friend_slip_failed"}
+                else:
+                    return{"status" : "select_slip_like_failed"}
+            else:
+                return{"status" : "select_comment_like_failed"}
+        else:
+            return{"status" : "select_comment_failed"}
+            
+    elif info["request_type"] == "user_like_bet_slip":
+        insert_slip_query = "INSERT INTO bet_slip_like (n_user_ID, bet_slip_ID) VALUES (%s, %s)"
+        value = (info["user_ID"], info["focused_bet_slip_ID"])
+        execute_insert = cursor.execute(insert_slip_query, value)
+        if execute_insert:
+            sql.connection.commit()
+            return {"status": "success"}
+        else:
+            return {"status": "Could not insert into bet_slip_like"}
+
+    elif info["request_type"] == "comment_on_bet_slip":
+        insert_comment_query = "INSERT INTO comments (user_ID, comment, comment_date, like_count) VALUES ( %s, %s , NOW(), 0)"
+        value = (info["user_ID"], info["comment_text"])
+        execute_insert = cursor.execute(insert_comment_query, value)
+        if execute_insert:
+
+            cursor.execute("SELECT LAST_INSERT_ID()")
+
+            last_comment_ID = cursor.fetchone()[0]
+            insert_slip_comment_query = "INSERT INTO bet_slip_comment(comment_ID, bet_slip_ID) VALUES (%s, %s)"
+            value = (last_comment_ID, info["focused_bet_slip_ID"])
+            execute_insert = cursor.execute(insert_slip_comment_query, value)
+            if execute_insert:
+                cursor.connection.commit()
+                return {"status": "success"}
+            else:
+                return {"status": "Could not insert into bet_slip_comment"}
+        else:
+            return {"status": "Could not insert into comment table"}
+
+    elif info["request_type"] == "like_comment":
+        like_query = "INSERT INTO like_comment (comment_ID, n_user_ID) VALUES (%s, %s)"
+        value = info["comment_ID"], info["user_ID"]
+        execute_like = cursor.execute(like_query, value)
+        if execute_like:
+            sql.connection.commit()
+            return {"status": "success"}
+        else:
+            return {"status": "Could not like comment"}
 
 @app.route('/signin', methods=['GET', 'POST'])
 def login():
@@ -362,7 +758,7 @@ def login():
                             result = {
                                 "success" : "true",
                                 "type" : type,
-                                "user_id" : user[0],
+                                "user_ID" : user[0],
                                 "username" : userInfo['username']
                             }
                             return jsonify({"result" : result})
@@ -651,7 +1047,7 @@ def admin_edit_bets():
         else:
             return {"status" : "Bet could not be cancelled"}
 
-    elif input["request_type"] == "insert_bet":
+    elif info["request_type"] == "insert_bet":
 
         search_unfinished_matches = "SELECT m.match_ID, m.sport_name FROM matches m WHERE NOT EXISTS ( SELECT match_ID FROM matches NATURAL JOIN results WHERE m.match_ID = match_ID)"
         unfinished_match = cursor.execute(search_unfinished_matches)
@@ -1117,12 +1513,896 @@ def admin_edit_bets():
                         else:
                             {"status": "No winning slips"}
             else:
-                {"status": "No ended matches"}
 
+               {"status": "No ended matches"}
                 
+@app.route('/profile', methods=['GET', 'POST', 'DELETE', 'UPDATE'])
+def profile():
+    info = request.get_json()
+    if info["request_type"] == "get_user_info":
+        cursor = sql.connection.cursor()
+        statement = "WITH current AS (SELECT n_user_ID, balance, winning_cnt FROM normal_user) \
+                    SELECT username, name, surname, balance, winning_cnt, birth_year, mail FROM current \
+                    NATURAL JOIN user WHERE user_ID = {0}".format(info["user_ID"])
+        value = (info["user_ID"])
+        cursor.execute(statement)
+        
+        user = cursor.fetchone()
+        result = {
+            "username" : user[0],
+            "name" : user[1],
+            "surname" : user[2],
+            "balance" : user[3],
+            "winning_cnt" : user[4],
+            "birth_year" : user[5],
+            "mail" : user[6]
+        }
+
+        return jsonify({"result" : result})
+
+    if info["request_type"] == "get_pending_bet_slips":
+        cursor = sql.connection.cursor()
+
+        cursor.execute("WITH user_bet_slips AS (SELECT bet_slip_ID FROM bet_slip WHERE creator_ID = {0} AND isPlayed = TRUE), \
+                        pending_slip AS (SELECT DISTINCT bet_slip_ID FROM user_bet_slips NATURAL JOIN placed_on NATURAL JOIN bet WHERE result = 'PENDING'), \
+                        bet_data AS (SELECT * FROM pending_slip NATURAL JOIN placed_on NATURAL JOIN bet), match_data AS (SELECT * FROM bet_data NATURAL JOIN \
+                        plays), all_competitors AS (SELECT team_name, competitor_ID FROM competitors) SELECT * FROM match_data NATURAL JOIN all_competitors".format(info["user_ID"]))
+        
+        bet_slip_results_pending = []
+        
+        pending_bet_slips_columns = [column[0] for column in cursor.description]
+
+        for row in cursor.fetchall():
+            bet_slip_results_pending.append(dict(zip(pending_bet_slips_columns, row)))
+
+        user_hash = {
+            "user_ID" : info["user_ID"],
+            "bet_slips" : []
+        }
+
+        for row in bet_slip_results_pending:
+            already_added = False
+            bet_slip_found = False
+
+            if row["side"] == "HOME":
+                home_side = row["team_name"]
+                away_side = ""
+            else:
+                home_side = ""
+                away_side = row["team_name"]
+
+            total_ratio = row["ratio"]
+
+            for bet_slip in user_hash["bet_slips"]:
+                if bet_slip["bet_slip_ID"] == row["bet_slip_ID"]:
+                    bet_slip_found = True
+                    
+                    for bet in bet_slip["bets"]:
+                        if bet["bet_ID"] == row["bet_ID"] and bet["match_ID"] == row["match_ID"]:
+                            already_added = True
+                            if bet["home_side"] == "":
+                                bet["home_side"] = row["team_name"]
+                            else:
+                                bet["away_side"] = row["team_name"]
+                    if not already_added:
+                        bet_to_add = {
+                            "bet_ID": row["bet_ID"],
+                            "match_ID": row["match_ID"],
+                            "home_side": home_side,
+                            "away_side": away_side,
+                            "result": row["result"],
+                            "mbn": row["mbn"],
+                            "ratio": total_ratio,
+                            "bet_type": row["bet_type"]
+                        }
+                        bet_slip["bets"].append(bet_to_add)
+            if not bet_slip_found:
+                bets = [{
+                    "bet_ID": row["bet_ID"],
+                    "match_ID": row["match_ID"],
+                    "home_side": home_side,
+                    "away_side": away_side,
+                    "result": row["result"],
+                    "mbn": row["mbn"],
+                    "ratio": total_ratio,
+                    "bet_type": row["bet_type"]
+                }]
+                user_hash["bet_slips"].append({
+                    "bet_slip_ID": row["bet_slip_ID"],
+                    "bets": bets
+                })           
+
+        return user_hash
+
+    if info["request_type"] == "get_ended_bet_slips":
+        cursor = sql.connection.cursor()
+
+        cursor.execute("WITH user_bet_slips AS (SELECT bet_slip_ID FROM bet_slip WHERE creator_id = {0}), ended_slip AS"
+                    " (SELECT DISTINCT u.bet_slip_ID FROM user_bet_slips u WHERE NOT EXISTS (SELECT bet_ID FROM "
+                    " user_bet_slips NATURAL JOIN placed_on NATURAL JOIN bet WHERE bet_slip_ID = u.bet_slip_ID AND"
+                    " result = 'PENDING')), all_bet_data AS (SELECT * FROM ended_slip NATURAL JOIN placed_on"
+                    " NATURAL JOIN bet), match_data AS (SELECT * FROM all_bet_data NATURAL JOIN plays),"
+                    " all_competitors AS (SELECT team_name, competitor_ID FROM competitors) SELECT * FROM match_data \
+                        NATURAL JOIN all_competitors".format(info["user_ID"]))
+
+        bet_slip_results_ended = []
+
+        ended_bet_slips_columns = [column[0] for column in cursor.description]
+
+        for row in cursor.fetchall():
+            bet_slip_results_ended.append(dict(zip(ended_bet_slips_columns, row)))
+
+        user_hash = {
+            "user_ID": info["user_ID"],
+            "bet_slips": []
+        }
+
+        for row in bet_slip_results_ended:
+            composite_already_added = False
+            bet_slip_found = False
+
+            if row["side"] == "HOME":
+                home_side = row["team_name"]
+                away_side = ""
+
+            else:
+                home_side = ""
+                away_side = row["team_name"]
+
+            total_ratio = row["ratio"]
+
+            for bet_slip in user_hash["bet_slips"]:
+
+                if bet_slip["bet_slip_ID"] == row["bet_slip_ID"]:
+                    bet_slip_found = True
+                    for bet in bet_slip["bets"]:
+                        if bet["bet_ID"] == row["bet_ID"] and bet["match_ID"] == row["match_id"]:
+                            composite_already_added = True
+
+                            if bet["home_side"] == "":
+                                bet["home_side"] = row["team_name"]
+                            else:
+                                bet["away_side"] = row["team_name"]
+                    if not composite_already_added:
+                        bet_to_add = {
+                            "bet_ID": row["bet_ID"],
+                            "match_ID": row["match_ID"],
+                            "home_side": home_side,
+                            "away_side": away_side,
+                            "result": row["result"],
+                            "mbn": row["mbn"],
+                            "ratio": total_ratio,
+                            "bet_type": row["bet_type"]
+                        }
+                        bet_slip["bets"].append(bet_to_add)
+
+            if not bet_slip_found:
+                bets = [{
+                    "bet_ID": row["bet_ID"],
+                    "match_ID": row["match_ID"],
+                    "home_side": home_side,
+                    "away_side": away_side,
+                    "result": row["result"],
+                    "mbn": row["mbn"],
+                    "ratio": total_ratio,
+                    "bet_type": row["bet_type"]
+                }]
+                user_hash["bet_slips"].append({
+                    "bet_slip_ID": row["bet_slip_ID"],
+                    "bets": bets
+                })
+
+        return user_hash
+    
+    if info["request_type"] == "get_friends":
+        cursor = sql.connection.cursor()
+
+        cursor.execute("WITH friends AS (SELECT friend_ID, user_ID "
+                    "FROM normal_user_friend) SELECT username FROM friends NATURAL JOIN user "
+                    "WHERE user_ID = '{0}'".format(info["user_ID"]))
+
+        user = cursor.fetchall()
+        friends = []
+
+        for row in user:
+            friends.append(row[0])
+
+        result = {
+            "friends": friends
+        }
+        return jsonify({"result": result})
+    
+    if info["request_type"] == "search_users":
+        cursor = sql.connection.cursor()
+        cursor.execute("SELECT n_user_ID, username FROM normal_user AS n INNER JOIN user AS u ON n.n_user_ID = u.user_ID "
+                    "WHERE username LIKE {0} AND n.n_user_ID <> {1}"
+                    .format('\'' + info["search_text"] + '%\'', info["user_ID"]))
+
+        val = cursor.fetchall()
+        users = []
+
+        for row in val:
+            friend = {"user_ID": row[0], "username": row[1]}
+            users.append(friend)
+
+        result = {
+            "searched_users": users
+        }
+        return jsonify({"result": result})
+
+    if info["request_type"] == "add_friend":
+        cursor = sql.connection.cursor()
+        val1 = cursor.execute("INSERT INTO normal_user_friend (user_ID, friend_ID) VALUES ({0}, {1})"
+                           .format(info["user_ID"], info["friend_ID"]))
+        sql.connection.commit()
+
+        val2 = cursor.execute("INSERT INTO normal_user_friend (user_ID, friend_ID) VALUES ({1}, {0})"
+                           .format(info["user_ID"], info["friend_ID"]))
+        sql.connection.commit()
+
+        if val1 > 0 and val2 > 0:
+            result = {
+                "success": True
+            }
+        else:
+            result = {
+                "success": False
+            }
+
+        return jsonify({"result": result})
+
+    if info["request_type"] == "update_balance":
+        cursor = sql.connection.cursor()
+        val = cursor.execute("UPDATE normal_user SET balance = ( normal_user.balance + {1} ) "
+                          "WHERE n_user_ID = {0}".format(info["user_ID"], info["balance_change"]))
+
+        sql.connection.commit()
+
+        if val > 0:
+            result = {
+                "success": True
+            }
+        else:
+            result = {
+                "success": False
+            }
+
+        return jsonify({"result": result})
+    
+    if info["request_type"] == "edit_profile":
+        cursor = sql.connection.cursor()
+        check = cursor.execute("SELECT * FROM user WHERE username = '{0}'".format(info["new_username"]))
+        
+        if check > 0:
+            result = {
+                "success": False
+            }
+            return jsonify({"result": result})
+        else:
+            val1 = cursor.execute("UPDATE user SET username = '{1}' WHERE user_ID = '{0}'"
+                               .format(info["user_ID"], info["new_username"]))
+            sql.connection.commit()
+
+            val2 = cursor.execute("UPDATE user SET password = '{1}' WHERE user_ID = '{0}'"
+                               .format(info["user_ID"], info["new_password"]))
+            sql.connection.commit()
+
+            if val1 > 0 and val2 > 0:
+                result = {
+                    "success": True
+                }
+            else:
+                result = {
+                    "success": False
+                }
+
+            return jsonify({"result": result})
+
+@app.route('/editor', methods=["GET", "POST"])
+def editor():
+    cursor = sql.connection.cursor()
+
+    info = request.get_json(force=True)
+    print(info)
+    if info["request_type"] == "display_editors":  
+
+        cursor.execute("SELECT name, surname, editor_id_table.win_rate, winning_cnt, user_ID AS editor_ID FROM "
+                    "( (SELECT editor.editor_ID AS user_ID, win_rate, winning_cnt FROM editor) AS editor_id_table "
+                    "NATURAL JOIN user)")
+
+        editor_results = []
+        editor_columns = [column[0] for column in cursor.description]
+
+        for row in cursor.fetchall():
+            editor_results.append(dict(zip(editor_columns, row)))
+
+        cursor.execute("SELECT editor_ID FROM normal_user_follows WHERE user_ID = {0}".format(info["user_ID"]))
+
+        user_follows_results = []
+
+        user_follows_columns = [column[0] for column in cursor.description]
+
+        for row in cursor.fetchall():
+            user_follows_results.append(dict(zip(user_follows_columns, row)))
+
+        cursor.execute("WITH editor_slip_data AS (SELECT * FROM ( (SELECT bet_slip_ID, sharer_ID as editor_ID FROM "
+                    "shared_slip WHERE sharer_ID IN (SELECT editor_ID FROM editor)) as editor_slips NATURAL JOIN"
+                    " placed_on NATURAL JOIN bet)), match_data AS (SELECT * FROM editor_slip_data NATURAL JOIN "
+                    "plays), all_competitors AS (SELECT team_name, competitor_ID FROM competitors)"
+                    ", match_date AS (SELECT match_ID, start_date FROM matches NATURAL JOIN "
+                    "editor_slip_data) SELECT DISTINCT * FROM (match_data NATURAL JOIN editor_slip_data NATURAL JOIN"
+                    " all_competitors NATURAL JOIN match_date)")
+
+        editor_slips_results = []
+
+        editor_slip_columns = [column[0] for column in cursor.description]
+
+        for row in cursor.fetchall():
+            editor_slips_results.append(dict(zip(editor_slip_columns, row)))
+
+        editor_bet_slip_comment_query = \
+            "WITH editor_bet_slips AS (SELECT bet_slip_ID, sharer_ID as editor_ID FROM shared_slip WHERE" \
+            " sharer_ID IN (SELECT editor_ID FROM editor)) "
+
+        cursor.execute(editor_bet_slip_comment_query + " SELECT bet_slip_ID, comment_ID, comment, username "
+                                                    "FROM editor_bet_slips NATURAL JOIN"
+                                                    " bet_slip_comment NATURAL JOIN comments NATURAL JOIN user")
+
+        bet_slip_comments_results = []
+
+        bet_slip_comments_columns = [column[0] for column in cursor.description]
+
+        for row in cursor.fetchall():
+            bet_slip_comments_results.append(dict(zip(bet_slip_comments_columns, row)))
+
+        cursor.execute(editor_bet_slip_comment_query + " SELECT bet_slip_ID, Count(bet_slip_ID) as like_count FROM"
+                                                    " editor_bet_slips NATURAL JOIN bet_slip_like GROUP BY bet_slip_ID")
+
+        bet_slip_like_results = []
+
+        bet_slip_like_columns = [column[0] for column in cursor.description]
+
+        for row in cursor.fetchall():
+            bet_slip_like_results.append(dict(zip(bet_slip_like_columns, row)))
+
+        cursor.execute(editor_bet_slip_comment_query + " SELECT comment_ID, Count(n_user_ID) as comment_like_count FROM"
+                                                    " editor_bet_slips NATURAL JOIN bet_slip_comment "
+                                                    "NATURAL JOIN like_comment GROUP BY comment_ID")
+
+        bet_slip_comments_likes_results = []
+
+        bet_slip_comments_likes_columns = [column[0] for column in cursor.description]
+
+        for row in cursor.fetchall():
+            bet_slip_comments_likes_results.append(dict(zip(bet_slip_comments_likes_columns, row)))
         
 
-                                                                         
+        bet_slip_comment_map = []
 
+        for row in bet_slip_comments_results:
+            bet_slip_found = False
+
+            comment_to_add = {
+                "username": row["username"],
+                "comment_ID": row["comment_ID"],
+                "comment": row["comment"],
+                "like_count": ""
+            }
+
+            for liked_comment in bet_slip_comments_likes_results:
+                if liked_comment["comment_ID"] == comment_to_add["comment_ID"]:
+                    comment_to_add["like_count"] = liked_comment["like_count"]
+
+            for bet_slip in bet_slip_comment_map:
+
+                if row["bet_slip_ID"] == bet_slip["bet_slip_ID"]:
+                    bet_slip_found = True
+
+                    bet_slip["bet_slip_comments"].append(comment_to_add)
+            if not bet_slip_found:
+                comment_map_to_add = {
+                    "bet_slip_ID": row["bet_slip_ID"],
+                    "bet_slip_comments": [comment_to_add]
+                }
+
+                bet_slip_comment_map.append(comment_map_to_add)
+
+        cursor.execute("SELECT editor_ID FROM editor")
+
+        editor_id_results = []
+
+        editor_id_columns = [column[0] for column in cursor.description]
+
+        for row in cursor.fetchall():
+            editor_id_results.append(dict(zip(editor_id_columns, row)))
+
+        editor_won_lost_results_dict = []
+
+        for editor_id in editor_id_results:
+  
+            editor_to_add = {
+                "editor_ID": editor_id["editor_ID"],
+                "bet_slips_won": 0,
+                "bet_slips_lost": 0,
+                "single_bet_win_count": 0,
+                "single_bet_lose_count": 0
+            }
+            if cursor.execute("WITH editor_slips AS (SELECT bet_slip_ID, creator_ID as editor_ID FROM bet_slip WHERE "
+                           "creator_ID = {0}), editor_bet_ID AS (SELECT * FROM placed_on NATURAL JOIN editor_slips)"
+                           " SELECT COUNT(bet_slip_ID) AS won_bet_slip_count FROM editor_slips WHERE NOT EXISTS (SELECT"
+                           " bet_ID, match_ID FROM editor_bet_ID NATURAL JOIN bet WHERE bet_slip_ID = bet_slip_ID "
+                           "AND (result = 'LOST' OR result = 'PENDING')) GROUP BY editor_ID"
+                                   .format(editor_id["editor_ID"])) > 0:
+                won_count = cursor.fetchone()[0]
+                editor_to_add["bet_slips_won"] = won_count
+
+            if cursor.execute("WITH editor_slips AS (SELECT bet_slip_ID, creator_ID as editor_ID FROM bet_slip WHERE"
+                           " creator_ID = {0}), editor_bet_ID AS (SELECT * FROM placed_on NATURAL JOIN editor_slips)"
+                           "SELECT COUNT(bet_slip_ID) AS lost_bet_slip_count FROM editor_slips WHERE NOT "
+                           "EXISTS (SELECT bet_ID, match_ID FROM editor_bet_ID NATURAL JOIN bet WHERE "
+                           "editor_slips.bet_slip_ID = bet_slip_ID AND (result = 'LOST')) GROUP BY editor_ID"
+                                   .format(editor_id["editor_ID"])) > 0:
+                lost_count = cursor.fetchone()[0]
+                editor_to_add["bet_slips_lost"] = lost_count
+
+            if cursor.execute("WITH editor_bets AS (SELECT bet_ID, match_ID, editor_ID FROM suggested_bet WHERE editor_ID"
+                           " = {0}) SELECT COUNT(bet_ID) AS won_count FROM editor_bets NATURAL JOIN bet"
+                           " GROUP BY editor_ID, result HAVING result = 'WON'".format(editor_id["editor_ID"])) > 0:
+                single_bet_win_count = cursor.fetchone()[0]
+                editor_to_add["single_bet_win_count"] = single_bet_win_count
+
+            if cursor.execute("WITH editor_bets AS (SELECT bet_ID, match_ID, editor_ID FROM suggested_bet WHERE editor_ID"
+                           " = {0}) SELECT COUNT(bet_ID) AS won_count FROM editor_bets NATURAL JOIN bet"
+                           " GROUP BY editor_ID, result HAVING result = 'LOST'".format(editor_id["editor_ID"])) > 0:
+                single_bet_lose_count = cursor.fetchone()[0]
+                editor_to_add["single_bet_lose_count"] = single_bet_lose_count
+
+            editor_won_lost_results_dict.append(editor_to_add)
+
+        cursor.execute("WITH suggested_bet_data AS (SELECT * FROM ((SELECT * FROM suggested_bet) as suggested NATURAL JOIN"
+                    " bet)), match_data AS (SELECT * FROM suggested_bet_data NATURAL JOIN "
+                    "plays), all_competitors AS (SELECT team_name, competitor_ID FROM competitors), match_date AS (SELECT match_ID, start_date FROM `matches` NATURAL JOIN "
+                    "suggested_bet_data) SELECT * FROM match_data NATURAL JOIN suggested_bet_data NATURAL JOIN"
+                    " all_competitors NATURAL JOIN match_date")
+
+        suggested_bet_results = []
+
+        suggested_bet_columns = [column[0] for column in cursor.description]
+
+        for row in cursor.fetchall():
+            suggested_bet_results.append(dict(zip(suggested_bet_columns, row)))
+
+        suggested_bet_map = []
+
+        for row in suggested_bet_results:
+            composite_already_added = False
+            editor_found = False
+
+            if row["side"] == "HOME":
+                home_side = row["team_name"]
+                away_side = ""
+
+            else:
+                home_side = ""
+                away_side = row["team_name"]
+
+            total_ratio = row["ratio"]
+            editor_ID = row["editor_ID"]
+
+            for editor in suggested_bet_map:
+
+                if editor["editor_ID"] == editor_ID:
+                    editor_found = True
+
+                    for bet in editor["suggested_bets"]:
+                        if bet["bet_ID"] == row["bet_ID"] and bet["match_ID"] == row["match_ID"]:
+                            composite_already_added = True
+
+                            if bet["home_side"] == "":
+                                bet["home_side"] = row["team_name"]
+                            else:
+                                bet["away_side"] = row["team_name"]
+                    if not composite_already_added:
+                        bet_to_add = {
+                            "bet_ID": row["bet_ID"],
+                            "match_ID": row["match_ID"],
+                            "home_side": home_side,
+                            "away_side": away_side,
+                            "ratio": total_ratio,
+                            "result": row["result"],
+                            "mbn": row["mbn"],
+                            "start_date": row["start_date"],
+                            "bet_type": row["bet_type"],
+                            "comment": row["comment"]                     
+                        }
+                        editor["suggested_bets"].append(bet_to_add)
+            if not editor_found:
+                editor_to_add = {
+                    "editor_ID": editor_ID,
+                    "suggested_bets": []
+                }
+
+                suggested_bet = {
+                    "bet_ID": row["bet_ID"],
+                    "match_ID": row["match_ID"],
+                    "home_side": home_side,
+                    "away_side": away_side,
+                    "ratio": total_ratio,
+                    "result": row["result"],
+                    "mbn": row["mbn"],
+                    "start_date": row["start_date"],
+                    "bet_type": row["bet_type"],
+                    "comment": row["comment"]
+                }
+
+                editor_to_add["suggested_bets"].append(suggested_bet)
+
+                suggested_bet_map.append(editor_to_add)
+
+        editor_bet_slip_map = []
+
+        for row in editor_slips_results:
+            composite_already_added = False
+            bet_slip_found = False
+            editor_found = False
+
+            if row["side"] == "HOME":
+                home_side = row["team_name"]
+                away_side = ""
+
+            else:
+                home_side = ""
+                away_side = row["team_name"]
+
+            total_ratio = row["ratio"]
+            editor_ID = row["editor_ID"]
+
+            for editor in editor_bet_slip_map:
+                if editor["editor_ID"] == editor_ID:
+
+                    editor_found = True
+                    for bet_slip in editor["bet_slips"]:
+
+                        if bet_slip["bet_slip_ID"] == row["bet_slip_ID"]:
+                            bet_slip_found = True
+                            for bet in bet_slip["bets"]:
+                                if bet["bet_ID"] == row["bet_ID"] and bet["match_ID"] == row["match_ID"]:
+                                    composite_already_added = True
+
+                                    if bet["home_side"] == "":
+                                        bet["home_side"] = row["team_name"]
+                                    else:
+                                        bet["away_side"] = row["team_name"]
+                            if not composite_already_added:
+                                bet_to_add = {
+                                    "bet_ID": row["bet_ID"],
+                                    "match_ID": row["match_ID"],
+                                    "home_side": home_side,
+                                    "away_side": away_side,
+                                    "ratio": total_ratio,
+                                    "result": row["result"],
+                                    "mbn": row["mbn"],
+                                    "start_date": row["start_date"],
+                                    "bet_type": row["bet_type"]
+                                }
+                                bet_slip["bets"].append(bet_to_add)
+
+                    if not bet_slip_found:
+                        bets = [{
+                            "bet_ID": row["bet_ID"],
+                            "match_ID": row["match_ID"],
+                            "home_side": home_side,
+                            "away_side": away_side,
+                            "ratio": total_ratio,
+                            "result": row["result"],
+                            "mbn": row["mbn"],
+                            "start_date": row["start_date"],
+                            "bet_type": row["bet_type"]
+                        }]
+                        editor["bet_slips"].append({
+                            "bet_slip_ID": row["bet_slip_ID"],
+                            "bets": bets,
+                            "comments": [],
+                            "bet_slip_like_count": 0
+                        })
+            if not editor_found:
+                editor_to_add = {
+                    "editor_ID": editor_ID,
+                    "bet_slips": []
+                }
+
+                bets = [{
+                    "bet_ID": row["bet_ID"],
+                    "match_ID": row["match_ID"],
+                    "home_side": home_side,
+                    "away_side": away_side,
+                    "ratio": total_ratio,
+                    "result": row["result"],
+                    "mbn": row["mbn"],
+                    "start_date": row["start_date"],
+                    "bet_type": row["bet_type"]
+                }]
+
+                editor_to_add["bet_slips"].append({
+                    "bet_slip_ID": row["bet_slip_ID"],
+                    "bets": bets,
+                    "comments": [],
+                    "bet_slip_like_count": 0
+                })
+
+                editor_bet_slip_map.append(editor_to_add)
+
+        for editor in editor_bet_slip_map:
+  
+            for editor_bet_slip in editor["bet_slips"]:
+
+                for like in bet_slip_like_results:
+                    if like["bet_slip_ID"] == editor_bet_slip["bet_slip_ID"]:
+                        editor_bet_slip["bet_slip_like_count"] = like["like_count"]
+
+                for bet_slip_comments in bet_slip_comment_map:
+
+                    if bet_slip_comments["bet_slip_ID"] == editor_bet_slip["bet_slip_ID"]:
+                        editor_bet_slip["comments"] = bet_slip_comments["bet_slip_comments"]
+        
+        editor_final = []
+
+        for editor in editor_results:
+            editor_to_add = {
+                "editor_ID": editor["editor_ID"],
+                "name": editor["name"],
+                "surname": editor["surname"],
+                "win_rate": editor["win_rate"],
+                "winning_cnt": editor["winning_cnt"],
+                "followed_by_user": False,
+                "single_bet_win_count": 0,
+                "single_bet_lose_count": 0,
+                "bet_slips_won": 0,
+                "bet_slips_lost": 0,
+                "bet_slips": [],
+                "suggested_bets": []
+            }
+            for row in user_follows_results:
+                if editor["editor_ID"] == row["editor_ID"]:
+                    editor_to_add["followed_by_user"] = True
+
+            for row in editor_won_lost_results_dict:
+                if editor["editor_ID"] == row["editor_ID"]:
+                    editor_to_add["single_bet_win_count"] = row["single_bet_win_count"]
+                    editor_to_add["single_bet_lose_count"] = row["single_bet_lose_count"]
+                    editor_to_add["bet_slips_won"] = row["bet_slips_won"]
+                    editor_to_add["bet_slips_lost"] = row["bet_slips_lost"]
+
+            for editor_map in editor_bet_slip_map:
+                if editor_map["editor_ID"] == editor["editor_ID"]:
+                    editor_to_add["bet_slips"] = editor_map["bet_slips"]
+
+            for suggested_map in suggested_bet_map:
+                if suggested_map["editor_ID"] == editor["editor_ID"]:
+                    editor_to_add["suggested_bets"] = suggested_map["suggested_bets"]
+
+            editor_final.append(editor_to_add)
+
+        return {"editors": editor_final}
+    
+    elif info["request_type"] == "follow_editor":
+
+        val = cursor.execute("INSERT INTO normal_user_follows (editor_ID, user_ID) VALUES ({0}, {1})".format(info["editor_ID"],
+                                                                                             info["user_ID"]))
+
+        sql.connection.commit()
+
+        if val > 0:
+            result = {
+                "success": True
+            }
+        else:
+            result = {
+                "success": False
+            }
+        return jsonify({"result": result})
+
+    elif info["request_type"] == "unfollow_editor":
+
+        val = cursor.execute("DELETE FROM normal_user_follows WHERE user_ID = {0} AND editor_ID = {1}".format(info["user_ID"],
+                                                                                              info["editor_ID"]))
+        sql.connection.commit()
+        if val > 0:
+            result = {
+                "success": True
+            }
+        else:
+            result = {
+                "success": False
+            }
+        return jsonify({"result": result})
+    
+    elif info["request_type"] == "play_editor_bet_slip":
+  
+        cursor.execute("SELECT match_ID, bet_ID FROM (SELECT match_ID, bet_ID FROM placed_on WHERE bet_slip_ID = {0})"
+                    " bets NATURAL JOIN bet WHERE result = 'PENDING'".format(info["bet_slip_ID"]))
+
+        editor_pending_bets_results = []
+
+        editor_pending_bets_columns = [column[0] for column in cursor.description]
+
+        for row in cursor.fetchall():
+            editor_pending_bets_results.append(dict(zip(editor_pending_bets_columns, row)))
+
+        cursor.execute("WITH user_bet_slip AS (SELECT bet_slip_ID FROM bet_slip WHERE creator_ID = {0} AND isPlayed = FALSE)"
+                    " SELECT match_ID, bet_ID FROM user_bet_slip NATURAL JOIN placed_on".format(info["user_ID"]))
+
+        user_current_bets_results = []
+
+        user_current_bets_columns = [column[0] for column in cursor.description]
+
+        for row in cursor.fetchall():
+            user_current_bets_results.append(dict(zip(user_current_bets_columns, row)))
+
+        for row in editor_pending_bets_results:
+
+            bet_found = False
+
+            for bet in user_current_bets_results:
+
+                if bet["match_ID"] == row["match_ID"] and bet["bet_ID"] == row["bet_ID"]:
+                    bet_found = True
+                    break
+            if not bet_found:
+                cursor.execute("SELECT bet_slip_ID FROM bet_slip WHERE creator_ID = {0} AND isPlayed = FALSE"
+                            .format(info["user_ID"]))
+
+                user_bet_slip_id = cursor.fetchone()[0]
+
+                if cursor.execute("INSERT INTO placed_on (bet_slip_ID, bet_ID, match_ID) VALUES ({0}, {1}, {2})"
+                                       .format(user_bet_slip_id, row["bet_ID"], row["match_ID"])) > 0:
+
+                    sql.connection.commit()
+
+                else:
+                    return {"status": "Could not add bet to user betslip."}
+        return {"status": "success"}
+
+    elif info["request_type"] == "like_comment":
+
+        if cursor.execute("INSERT INTO like_comment (comment_ID, n_user_ID) VALUES ({0}, {1})"
+                               .format(info["comment_ID"], info["user_ID"])) > 0:
+
+            sql.connection.commit()
+            return {"status": "success"}
+
+        else:
+            return {"status": "Could not like comment"}
+
+
+@app.route('/admin/modify-raffle', methods=["GET", "POST"])
+def admin_modify_raffle():
+
+    cursor = sql.connection.cursor()
+
+    info = request.get_json(force=True)
+
+    if info["request_type"] == "add_item":
+
+        if cursor.execute("INSERT INTO item_coupon(description, coupon_amount, coupon_count, sold_coupons) VALUES ('{0}', '{1}', '{2}', '{3}')"
+                               .format(info["description"], info["coupon_amount"],
+                                       info["coupon_count"], info["sold_coupons"])) > 0:
+            sql.connection.commit()
+            cursor.execute("SELECT LAST_INSERT_ID()")
+
+            last_item_id = cursor.fetchone()[0]
+            return {"status" : "success"}
+
+        else:
+            return {"status": "Could not add to shop_item"}
+
+    elif info["request_type"] == "display_all_items":
+
+        cursor.execute("SELECT * FROM item_coupon")
+
+        item_results = []
+
+        item_results_columns = [column[0] for column in cursor.description]
+
+        for row in cursor.fetchall():
+            item_results.append(dict(zip(item_results_columns, row)))
+
+        return {"items": item_results}
+
+    # Needs to be updated ??
+    elif info["request_type"] == "update_total_amount":
+
+        if cursor.execute("SELECT item_ID FROM shop_item WHERE item_ID = {0}"
+                               .format(info["selected_item_id"])) > 0:
+
+            item_ID = cursor.fetchone()[0]
+
+            if cursor.execute("UPDATE item_coupon SET coupon_amount = {0}"
+                                   .format(info["new_amount"])) > 0:
+
+                sql.connection.commit()
+                return {"status": "success"}
+            else:
+                return {"status": "fail"}
+        else:
+            return {"status": "No item found"}
+
+    # Needs to be updated ??
+    elif info["request_type"] == "update_description":
+
+        if cursor.execute("SELECT item_ID FROM item_coupons WHERE item_ID = {0}"
+                               .format(info["selected_item_id"])) > 0:
+            item_ID = cursor.fetchone()[0]
+
+            if cursor.execute("UPDATE item_coupon SET description = {0}"
+                                   .format(info["new_description"])) > 0:
+
+                sql.connection.commit()
+                return {"status": "success"}
+            else:
+                return {"status": "fail"}
+
+    elif info["request_type"] == "remove_item":
+
+        if cursor.execute("DELETE FROM item_coupon WHERE item_ID = {0}"
+                               .format(info["selected_item_ID"])) > 0:
+
+            sql.connection.commit()
+            return {"status": "success"}
+        else:
+            return {"status": "Could not remove the item."}
+
+@app.route('/raffle', methods=["GET", "POST"])
+def raffle():
+    cursor = sql.connection.cursor()
+
+    info = request.get_json()
+
+    # get request_type, user_id
+    if info["request_type"] == "get_items":
+        cursor.execute("SELECT * FROM item_coupon").format(input['user_ID'])
+        val = cursor.fetchall()
+        items = []
+
+        for row in val:
+            item = [{"item_ID": row[0],
+                     "description": row[1],
+                     "coupon_amount": row[2],
+                     "coupon_count" : row[3],
+                     "sold_coupons": row[4]}]
+            items.append(item)
+
+        result = {
+            "items": items
+        }
+        return jsonify({"result": result})
+
+    if info["request_type"] == "buy_item":
+
+        cursor.execute("SELECT coupon_amount FROM item_coupon WHERE item_ID = {0}".format(info["item_ID"]))
+        total_amount = cursor.fetchone()
+
+        cursor.execute("SELECT balance FROM normal_user WHERE user_ID = {0}".format(info["user_ID"]))
+        balance = cursor.fetchone()
+
+        if total_amount[0] > balance[0]:
+            result = {
+                "success": False
+            }
+        else:
+            new_balance = balance[0] - total_amount[0]
+            cursor.execute("UPDATE normal_user SET balance = {0} WHERE user_ID = {1}".format(new_balance, info["user_ID"]))
+            sql.connection.commit()
+
+            result = {
+                "success": True
+            }
+
+        return jsonify({"result": result})
+
+
+
+    
+        
 
 app.run(debug=True)

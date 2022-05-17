@@ -409,23 +409,23 @@ left: 0;
 background-color: darkgray;
 }
 .navHomeTable .start-about, a:nth-child(2):hover~.animation {
-width: 110px;
+width: 120px;
 left: 100px;
 background-color: #e74c3c;
 }
 .navHomeTable .start-blog, a:nth-child(3):hover~.animation {
-width: 100px;
-left: 210px;
+width: 120px;
+left: 220px;
 background-color: #3498db;
 }
 .navHomeTable .start-portefolio, a:nth-child(4):hover~.animation {
-width: 160px;
-left: 310px;
+width: 120px;
+left: 340px;
 background-color: #9b59b6;
 }
 .navHomeTable .start-contact, a:nth-child(5):hover~.animation {
 width: 120px;
-left: 470px;
+left: 460px;
 background-color: #e67e22;
 }
 .navt{

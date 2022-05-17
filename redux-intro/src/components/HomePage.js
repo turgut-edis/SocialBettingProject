@@ -9,6 +9,7 @@ import share_icon from './image/share-this-2600.png'
 import "./csscomponents/homepage.css";
 
 
+
 import {
   BrowserRouter as Router,
   Routes,
@@ -32,6 +33,7 @@ var comment_like_cnt = "3";
 var mbn = "2";
 var max_winning = "270";
 var total_odd = "10.54";
+var league_name = "League Name";
 
 class HomePage extends Component {
   constructor(props) {
@@ -132,56 +134,98 @@ class HomePage extends Component {
 
     return (
       <div className="home-container">
-      <table className="my-table">
-        <tr>
-          <th>Firstname</th>
-          <th>Lastname</th>
-          <th>Team</th>
-          <th onClick={() => this.expandAll(players)}>
-            <button>
-              {players.length === this.state.expandedRows.length ? "-" : "+"}
-            </button>
-          </th>
-        </tr>
-        {playerRows}
-      </table>
-      <div className="nav">
-        <nav className="navbar navbar-expand-lg navbar-light fixed-top">
-          <Link className="navbar-brand" to={"/"}>BETaBET</Link>
-          <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
-            <ul className="navbar-nav">
-              <li className="nav-item3">
-                <Link className="nav-link" to={"/homepage"}>Home</Link>
-              </li>
-              <li className="nav-item4">
-                <Link className="nav-link" to={"/socialpage"}>Social</Link>
-              </li>
-              <li className="nav-item5">
-                <Link className="nav-link" to={"/profilepage"}>Profile</Link>
-              </li>
-              <li className="nav-item6">
-                <Link className="nav-link" to={"/raffle"}>Raffle</Link>
-              </li>
-              <li className="nav-item8">
-                <p>Funds:1500 TRY </p>
-              </li>
-              <li className="nav-item7">
-                <p>Welcome, {user}</p>
-              </li>
-              <li className="nav-item2">
-                <Link className="nav-link" to={"/"}>Logout</Link>
-              </li>
-            </ul>
-          </div>
+        <nav class="navHomeTable">
+          <a href="#all">All</a>
+          <a href="#football">Football</a>
+          <a href="#basketball">Basketball</a>
+          <a href="#tennis">Tennis</a>
+          <a href="#lol">LoL</a>
+          <div class="animation start-home"></div>
         </nav>
-      </div>
-      
-      <div className="betslip-container2">
-        asdasdfasfas
-      </div>
+        <div className="select-container">
+          <select class="form-select" aria-label="Default select example">
+            <option selected>Select League</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+          <select class="form-select" aria-label="Default select example">
+            <option selected>Select MBN</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+          <select class="form-select" aria-label="Default select example">
+            <option selected>Sort By</option>
+            <option value="1">Desc Ratio</option>
+            <option value="2">Asc Ratio</option>
+            <option value="3">Name</option>
+          </select>
+          <div class="input-group">
+            <div class="form-outline">
+              <input type="search" id="form1" class="form-control" placeholder="Search Match Name" />
+            </div>
+            <button type="button" class="btn btn-primary">
+              <i class="fas fa-search">Search</i>
+            </button>
+          </div>
+        </div>
+        <div class="table-container">
+        <span>{league_name}</span>
+        </div>
+        <table className="my-table">
+          
+          <tr>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Team</th>
+            <th onClick={() => this.expandAll(players)}>
+              <button>
+                {players.length === this.state.expandedRows.length ? "-" : "+"}
+              </button>
+            </th>
+          </tr>
+          {playerRows}
+        </table>
+
+        <div className="nav">
+          <nav className="navbar navbar-expand-lg navbar-light fixed-top">
+            <Link className="navbar-brand" to={"/"}>BETaBET</Link>
+            <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
+              <ul className="navbar-nav">
+                <li className="nav-item3">
+                  <Link className="nav-link" to={"/homepage"}>Home</Link>
+                </li>
+                <li className="nav-item4">
+                  <Link className="nav-link" to={"/socialpage"}>Social</Link>
+                </li>
+                <li className="nav-item5">
+                  <Link className="nav-link" to={"/profilepage"}>Profile</Link>
+                </li>
+                <li className="nav-item6">
+                  <Link className="nav-link" to={"/raffle"}>Raffle</Link>
+                </li>
+                <li className="nav-item8">
+                  <p>Funds:1500 TRY </p>
+                </li>
+                <li className="nav-item7">
+                  <p>Welcome, {user}</p>
+                </li>
+                <li className="nav-item2">
+                  <Link className="nav-link" to={"/"}>Logout</Link>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+
+
+        <div className="betslip-container2">
+          asdasdfasfas
+        </div>
 
       </div>
-      
+
     );
   };
 

@@ -217,9 +217,33 @@ button {
     position: absolute;
     width: 20%;
     margin-left: 77.8%;
-    margin-top: -43px;
+    margin-top: -40px;
     padding: 1%;
     display: flex;
     background-color: white;
     border: 2px solid black;
   }
+.my-table{
+    margin-top: 50px;
+}
+.select-container{
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 20px;
+    display: flex;
+    flex-direction: row;
+}
+.form-select{
+    margin-right: inherit;
+}
+.table-container{
+    margin-top: 20px;
+    margin-left: 10px;
+    margin-bottom: -50px;
+    margin-right: 20px;
+    display: flex;
+    flex-direction: row;
+}
+.form-control:focus{
+    color: black;
+}

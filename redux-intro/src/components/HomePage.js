@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import { Component } from "react";
+import players from "./players";
 import logo from './image/clipart442066.png'
-import "./csscomponents/components.css";
+import trash_icon from './image/trash-347.png'
+import share_icon from './image/share-this-2600.png'
+import "./csscomponents/homepage.css";
+
+
 
 import {
   BrowserRouter as Router,
@@ -11,182 +17,221 @@ import {
   Link,
   Switch,
 } from "react-router-dom";
+import { Card, CardGroup, Tab } from "react-bootstrap";
 
-export default function HomePage() {
-  const [user, setUser] = useState("");
-  const [pass, setPassword] = useState("");
+var user = "dodo";
+var username = "Dodo";
+var likecnt = "10";
+var team1 = "Team1";
+var team2 = "Team2";
+var mac_sonu = "2";
+var odd = "2.55";
+var mac_id = "5";
+var shared_match_cnt = "2";
+var shared_slip_total_odd = "90.00";
+var comment_like_cnt = "3";
+var mbn = "2";
+var max_winning = "270";
+var total_odd = "10.54";
+var league_name = "League Name";
 
-  function validateForm() {
-    return user.length > 0 && pass.length > 0;
+class HomePage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { expandedRows: [] };
   }
 
-  function handleSubmit(event) {
-    event.preventDefault();
-  }
+  handleExpand = player => {
+    let newExpandedRows = [...this.state.expandedRows];
+    let allExpanded = this.state.allExpanded;
+    let idxFound = newExpandedRows.findIndex(id => {
+      return id === player.id;
+    });
 
+    if (idxFound > -1) {
+      console.log("Collapsing " + player.firstName + " " + idxFound);
+      newExpandedRows.splice(idxFound, 1);
+    } else {
+      console.log("Expanding " + player.firstName);
+      newExpandedRows.push(player.id);
+    }
 
-  return (
-    <body>
+    console.log("Expanded rows");
+    console.log(newExpandedRows);
 
+    this.setState({ expandedRows: [...newExpandedRows] });
+  };
 
+  isExpanded = player => {
+    const idx = this.state.expandedRows.find(id => {
+      return id === player.id;
+    });
 
+    return idx > -1;
+  };
 
-      <div className="nav">
-        <nav className="navbar navbar-expand-lg navbar-light fixed-top">
-          <Link className="navbar-brand" to={"/"}>BETaBET</Link>
-          <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
-            <ul className="navbar-nav ml-auto">
-              <li className="nav-item3">
-                <Link className="nav-link" to={"/homepage"}>Home</Link>
-              </li>
-              <li className="nav-item4">
-                <Link className="nav-link" to={"/socialpage"}>Social</Link>
-              </li>
-              <li className="nav-item5">
-                <Link className="nav-link" to={"/profilepage"}>Profile</Link>
-              </li>
-              <li className="nav-item6">
-                <Link className="nav-link" to={"/raffle"}>Raffle</Link>
-              </li>
-              <li className="nav-item8">
-                <p>Funds:1500 TRY {user}</p>
-              </li>
-              <li className="nav-item7">
-                <p>Welcome, {user}</p>
-              </li>
-              <li className="nav-item2">
-                <Link className="nav-link" to={"/"}>Logout</Link>
-              </li>
-            </ul>
-          </div>
-        </nav>
-      </div>
+  expandAll = players => {
+    console.log("ExapndedRows: " + this.state.expandedRows.length);
+    console.log("Players:      " + players.length);
+    if (this.state.expandedRows.length === players.length) {
+      let newExpandedRows = [];
+      this.setState({ expandedRows: [...newExpandedRows] });
+      console.log("Collapsing all...");
+    } else {
+      let newExpandedRows = players.map(player => player.id);
+      this.setState({ expandedRows: [...newExpandedRows] });
+      console.log("Expanding all...");
+      console.log("Expanded rows " + newExpandedRows.length);
+    }
+  };
 
-      <div className="container-content">
-      <div class="right-rect">
-        My Betslips
-      
-      <div class="right-rect2">
-        <img src={logo} className="logo" alt="logo" />
-        Galatasaray - Real Madrid
-        <div class="txtforball">2</div>
-        <div class="txtforball2">MS:2 Odd:2.5</div>
+  getRows = player => {
+    let rows = [];
+    const projects = player.projects || [];
 
-      </div>
-      <div class="right-rect3">
-        <img src={logo} className="logo" alt="logo" />
-        Fenerbahçe - Beşiktaş
-        <div class="txtforball">5</div>
-        <div class="txtforball2">FH/MR: 0/X RC:2</div>
-        <div class="txtforball3">Odd: 11.9</div>
-      </div>
-      </div>
+    const firstRow = (
+      <tr>
+        <td>{player.firstName}</td>
+        <td>{player.lastName}</td>
+        <td>{player.team}</td>
+        <td>
+          {projects.length > 0 && (
+            <button onClick={() => this.handleExpand(player)}>
+              {this.isExpanded(player) ? "-" : "+"}
+            </button>
+          )}
+        </td>
+      </tr>
+    );
 
+    rows.push(firstRow);
 
-      <div class="left-rect">
+    if (this.isExpanded(player) && projects.length > 0) {
+      const projectRows = projects.map(project => (
+        <tr className="player-details">
+          <td className="player-details" />
+          <td colspan="3" className="player-details">
+            <br />
+            <div className="attribute">
+              <div className="attribute-name">Toggle Here: </div>
+              <div className="attribute-value">{project.name}</div>
+            </div>
+            <br />
+          </td>
+        </tr>
+      ));
+
+      rows.push(projectRows);
+    }
+
+    return rows;
+  };
+
+  getPlayerTable = players => {
+    const playerRows = players.map(player => {
+      return this.getRows(player);
+    });
+
+    return (
+      <div className="home-container">
         <nav class="navHomeTable">
           <a href="#all">All</a>
           <a href="#football">Football</a>
           <a href="#basketball">Basketball</a>
           <a href="#tennis">Tennis</a>
-          <a href="#contact">Contact</a>
+          <a href="#lol">LoL</a>
           <div class="animation start-home"></div>
         </nav>
-
-        <div class="navt">UEFA Champions League</div>
-      
-
-
-        <table id="all" class="table table-striped table-bordered table-sm " cellspacing="0"
-          width="100%">
-          <thead>
-
-            <tr>
-              <th>First name</th>
-              <th>Last name</th>
-              <th>Position</th>
-              <th>Office</th>
-              <th>Age</th>
-              <th>Start date</th>
-              <th>Salary</th>
-              <th>Extn.</th>
-              <th>E-mail</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Tiger</td>
-              <td>Nixon</td>
-              <td>System Architect</td>
-              <td>Edinburgh</td>
-              <td>61</td>
-              <td>2011/04/25</td>
-              <td>$320,800</td>
-              <td>5421</td>
-              <td>t.nixon@datatables.net</td>
-            </tr>
-            <tr>
-              <td>Garrett</td>
-              <td>Winters</td>
-              <td>Accountant</td>
-              <td>Tokyo</td>
-              <td>63</td>
-              <td>2011/07/25</td>
-              <td>$170,750</td>
-              <td>8422</td>
-              <td>g.winters@datatables.net</td>
-            </tr>
-            <tr>
-              <td>Ashton</td>
-              <td>Cox</td>
-              <td>Junior Technical Author</td>
-              <td>San Francisco</td>
-              <td>66</td>
-              <td>2009/01/12</td>
-              <td>$86,000</td>
-              <td>1562</td>
-              <td>a.cox@datatables.net</td>
-            </tr>
-            <tr>
-              <td>Cedric</td>
-              <td>Kelly</td>
-              <td>Senior Javascript Developer</td>
-              <td>Edinburgh</td>
-              <td>22</td>
-              <td>2012/03/29</td>
-              <td>$433,060</td>
-              <td>6224</td>
-              <td>c.kelly@datatables.net</td>
-            </tr>
-            <tr>
-              <td>Airi</td>
-              <td>Satou</td>
-              <td>Accountant</td>
-              <td>Tokyo</td>
-              <td>33</td>
-              <td>2008/11/28</td>
-              <td>$162,700</td>
-              <td>5407</td>
-              <td>a.satou@datatables.net</td>
-            </tr>
-            <tr>
-              <td>Brielle</td>
-              <td>Williamson</td>
-              <td>Integration Specialist</td>
-              <td>New York</td>
-              <td>61</td>
-              <td>2012/12/02</td>
-              <td>$372,000</td>
-              <td>4804</td>
-              <td>b.williamson@datatables.net</td>
-            </tr>
-          </tbody>
+        <div className="select-container">
+          <select class="form-select" aria-label="Default select example">
+            <option selected>Select League</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+          <select class="form-select" aria-label="Default select example">
+            <option selected>Select MBN</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+          <select class="form-select" aria-label="Default select example">
+            <option selected>Sort By</option>
+            <option value="1">Desc Ratio</option>
+            <option value="2">Asc Ratio</option>
+            <option value="3">Name</option>
+          </select>
+          <div class="input-group">
+            <div class="form-outline">
+              <input type="search" id="form1" class="form-control" placeholder="Search Match Name" />
+            </div>
+            <button type="button" class="btn btn-primary">
+              <i class="fas fa-search">Search</i>
+            </button>
+          </div>
+        </div>
+        <div class="table-container">
+        <span>{league_name}</span>
+        </div>
+        <table className="my-table">
+          
+          <tr>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Team</th>
+            <th onClick={() => this.expandAll(players)}>
+              <button>
+                {players.length === this.state.expandedRows.length ? "-" : "+"}
+              </button>
+            </th>
+          </tr>
+          {playerRows}
         </table>
 
-      </div>
+        <div className="nav">
+          <nav className="navbar navbar-expand-lg navbar-light fixed-top">
+            <Link className="navbar-brand" to={"/"}>BETaBET</Link>
+            <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
+              <ul className="navbar-nav">
+                <li className="nav-item3">
+                  <Link className="nav-link" to={"/homepage"}>Home</Link>
+                </li>
+                <li className="nav-item4">
+                  <Link className="nav-link" to={"/socialpage"}>Social</Link>
+                </li>
+                <li className="nav-item5">
+                  <Link className="nav-link" to={"/profilepage"}>Profile</Link>
+                </li>
+                <li className="nav-item6">
+                  <Link className="nav-link" to={"/raffle"}>Raffle</Link>
+                </li>
+                <li className="nav-item8">
+                  <p>Funds:1500 TRY </p>
+                </li>
+                <li className="nav-item7">
+                  <p>Welcome, {user}</p>
+                </li>
+                <li className="nav-item2">
+                  <Link className="nav-link" to={"/"}>Logout</Link>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+
+
+        <div className="betslip-container2">
+          asdasdfasfas
+        </div>
+
       </div>
 
-    </body>
+    );
+  };
 
-  );
+  render() {
+    return <div>{this.getPlayerTable(players)}</div>;
+  }
 }
+
+export default HomePage;

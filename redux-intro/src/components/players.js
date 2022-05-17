@@ -52,6 +52,24 @@ export default [
         weight: "250 lbs",
         position: "Shooting Guard"
       }
-    }
+    },
+    {
+      id: 40,
+      firstName: "Fenerbahçe",
+      lastName: "Galatasaray",
+      college: "2.30",
+      team: "LA Lakers",
+      projects: [
+        {
+          id: "1",
+          name: "test 1"
+        }
+      ],
+      stats: {
+        height: "2.30",
+        weight: "3.14",
+        position: "Shooting Guard"
+      }
+    },
   ];
   

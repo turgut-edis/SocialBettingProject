@@ -12,7 +12,7 @@ tr {
 th {
   color: #ffffff;
   padding: 5px 10px 5px 10px;
-  background-color: #616161;
+  background-color: #e17217;
   border: 1px solid black;
   text-align: center;
 
@@ -41,7 +41,7 @@ tr:hover {
 th:first-child,
 tr:first-child {
   padding: 0;
-  background-color: #616161;
+  background-color: #e17217;
 }
 
 table {

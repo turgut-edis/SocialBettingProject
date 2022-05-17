@@ -27,6 +27,16 @@ td {
 
   
 }
+td:hover {
+  background-color: #ffffff;
+  color: #000000;
+  cursor: pointer;
+}
+tr:hover {
+    background-color: #ffffff;
+    color: #000000;
+    cursor: pointer;
+  }
 
 th:first-child,
 tr:first-child {
@@ -43,6 +53,9 @@ tr:nth-child(odd) > td {
   background-color: #aaa;
   color: #fff;
 }
+tr:nth-child(odd) > td:hover {
+    background-color: rgb(0, 0, 0);
+  }
 
 tr > td.player-details:last-child {
   border: black;

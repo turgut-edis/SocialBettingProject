@@ -353,19 +353,132 @@ to 	{ width:0; background:transparent; }
 from { background:orange; }
 to 	{ width:0; background:transparent; }
 }
+.bet-text{
+  white-space: nowrap;
+  color:whitesmoke;
+  height: 200px;
+width: 200px;
+position:absolute;
+left:190px;
 
+margin: 90px;
+margin-right: 300px;
+display: flex;
+}
+.container-content2 {
+  border: 5px solid #FFFF00;
+  position: absolute;
+  
+  bottom: -100px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-color: orange;
+  border-image: none;
+  border-style: solid solid none;
+  border-width: 1px 0;
+}
+.bet-text2{
+  white-space: nowrap;
+  color:whitesmoke;
+  height: 200px;
+width: 200px;
+position:absolute;
+left:190px;
+bottom: 280px;
+
+margin: 90px;
+margin-right: 300px;
+display: flex;
+}
+.right-rect{
+  z-index:0;
+  height:550px;
+  width: 250px;
+  border-bottom: 3px solid #FFEB3B !important;
+  background-color: none;
+  margin-right: 500px;
+  position: absolute;
+bottom: 0;
+right: -490px;
+  border: solid;
+  text-align: left;
+  font-size: 15px;
+  
+}
+.right-rect2{
+z-index:0;
+height:100px;
+width: 230px;
+border-bottom: 3px solid #FFEB3B !important;
+background-color: none;
+margin-right: 500px;
+position: absolute;
+bottom: 410px;
+right: -480px;
+border: solid;
+text-align: left;
+font-size: 15px;
+
+}
+.right-rect3{
+z-index:0;
+height:100px;
+width: 230px;
+border-bottom: 3px solid #FFEB3B !important;
+background-color: none;
+margin-right: 500px;
+position: absolute;
+bottom: 300px;
+right: -480px;
+border: solid;
+text-align: left;
+font-size: 15px;
+
+}
+.left-rect{
+  z-index:0;
+  height:525px;
+  width: 1000px;
+  border-bottom: 3px solid #FFEB3B !important;
+  background-color: none;
+  margin-left: 0px;
+  position: absolute;
+bottom: 0;
+right: 270px;
+  border: solid;
+  text-align: left;
+  font-size: 15px;
+  
+}
 .logo{
 width: 30px;
   height: auto;
 }
-
+.txtforball{
+position:relative; 
+right:-10px;
+}
+.txtforball2{
+position:relative; 
+right:-30px;
+bottom:30px;
+}
+.txtforball3{
+position:relative; 
+right:-30px;
+bottom:33px;
+}
 .navHomeTable {
-margin-top: 50px;
+margin: 27px auto 0;
+
 position: relative;
 width: 590px;
 height: 25px;
+left:-200px;
+top:-55px;
 background-color: #E9967A;
-border-radius: px;
+border-radius: 8px;
 font-size: 0;
 }
 .navHomeTable a {
@@ -390,19 +503,19 @@ transition: all .5s ease 0s;
 border-radius: 8px;
 }
 a:nth-child(1) {
-width: 110px;
+width: 100px;
 }
 a:nth-child(2) {
 width: 110px;
 }
 a:nth-child(3) {
-width: 110px;
+width: 100px;
 }
 a:nth-child(4) {
-width: 110px;
+width: 160px;
 }
 a:nth-child(5) {
-width: 110px;
+width: 120px;
 }
 .navHomeTable .start-home, a:nth-child(1):hover~.animation {
 width: 100px;
@@ -410,23 +523,23 @@ left: 0;
 background-color: darkgray;
 }
 .navHomeTable .start-about, a:nth-child(2):hover~.animation {
-width: 120px;
+width: 110px;
 left: 100px;
 background-color: #e74c3c;
 }
 .navHomeTable .start-blog, a:nth-child(3):hover~.animation {
-width: 120px;
-left: 220px;
+width: 100px;
+left: 210px;
 background-color: #3498db;
 }
 .navHomeTable .start-portefolio, a:nth-child(4):hover~.animation {
-width: 120px;
-left: 340px;
+width: 160px;
+left: 310px;
 background-color: #9b59b6;
 }
 .navHomeTable .start-contact, a:nth-child(5):hover~.animation {
 width: 120px;
-left: 460px;
+left: 470px;
 background-color: #e67e22;
 }
 .navt{
@@ -668,9 +781,171 @@ background-color: #e67e22;
 .raffle-info{
 margin-left: 30%;
 }
+.nav-item8{
+  position:absolute;
+  top:12px;
+  right:120px;
+}
+.nav-item9{
+  position:absolute;
+  top:12px;
+  right:400px;
+}
+.nav-item10{
+  position:absolute;
+  top:16px;
+  right:280px;
+}
+.tb {
+  display: table;
+  width: 100%;
+}
 
+.td {
+  display: table-cell;
+  vertical-align: middle;
+}
 
+input,
+.button2 {
+  color: #fff;
+  font-family: Nunito;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background-color: transparent;
+}
 
+#cover {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  width: 550px;
+  padding: 35px;
+  margin: -280px 50px;
+  background-color: salmon;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px #ff7c7c, 0 0 0 20px #ffffffeb;
+  transform: scale(0.6);
+}
 
+.form2 {
+  height: 96px;
+}
 
- 
+input[type="text"] {
+  width: 100%;
+  height: 96px;
+  font-size: 60px;
+  line-height: 1;
+}
+
+input[type="text"]::placeholder {
+  color: whitesmoke;
+}
+
+#s-cover {
+  width: 1px;
+  padding-left: 35px;
+}
+
+.button2 {
+  position: relative;
+  display: block;
+  width: 84px;
+  height: 96px;
+  cursor: pointer;
+}
+
+#s-circle {
+  position: relative;
+  top: -8px;
+  left: 0;
+  width: 43px;
+  height: 43px;
+  margin-top: 0;
+  border-width: 15px;
+  border: 15px solid #fff;
+  background-color: transparent;
+  border-radius: 50%;
+  transition: 0.5s ease all;
+}
+
+.button2 span {
+  position: absolute;
+  top: 68px;
+  left: 43px;
+  display: block;
+  width: 45px;
+}
+.left-rect10{
+  position: absolute;
+  top: 190px;
+  left: -20px;
+  height:605px;
+  width: 600px;
+  border-bottom: 3px solid #FFEB3B !important;
+  background-color: none;
+  margin-left: 0px;
+  background-color: whitesmoke;
+  
+  border: solid;
+  text-align: left;
+  font-size: 15px;
+  
+}
+.right-rect10{
+  position:absolute;
+  bottom:0;
+  right: 0;
+  height:700px;
+  width: 300px;
+  border-bottom: 3px solid #FFEB3B !important;
+  background-color: white;
+  border: solid;
+  text-align: left;
+  font-size: 20px;
+  font-weight: bold;
+  
+}
+.right-rect11{
+  position:absolute;
+  bottom:0;
+  right: 320px;
+  height:700px;
+  width: 300px;
+  border-bottom: 3px solid #FFEB3B !important;
+  background-color: whitesmoke;
+  border: solid;
+  text-align: left;
+  font-size: 20px;
+  font-weight: bold;
+  
+}
+.right-rect12{
+  position:absolute;
+  bottom:0;
+  right: 640px;
+  height:340px;
+  width: 300px;
+  border-bottom: 3px solid #FFEB3B !important;
+  background-color: whitesmoke;
+  border: solid;
+  text-align: left;
+  font-size: 20px;
+  font-weight: bold;
+}
+.right-rect13{
+  position:absolute;
+  top:62px;
+  right: 640px;
+  height:340px;
+  width: 300px;
+  border-bottom: 3px solid #FFEB3B !important;
+  background-color: whitesmoke;
+  border: solid;
+  text-align: left;
+  font-size: 20px;
+  font-weight: bold;
+}

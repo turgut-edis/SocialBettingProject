@@ -127,27 +127,27 @@ class HomePage extends Component {
                   <tbody striped="1">
                     <tr>
                       <td>0/0</td>
-                      <td>3.0</td>
+                      <td onClick={() => alert("Bet Added...")}>3.0</td>
                     </tr>
                     <tr>
                       <td>0/X</td>
-                      <td>3.0</td>
+                      <td onClick={() => alert("Bet Added...")}>3.0</td>
                     </tr>
                     <tr>
                       <td>0/1</td>
-                      <td>3.0</td>
+                      <td onClick={() => alert("Bet Added...")}>3.0</td>
                     </tr>
                     <tr>
                       <td>1/0</td>
-                      <td>3.0</td>
+                      <td onClick={() => alert("Bet Added...")}>3.0</td>
                     </tr>
                     <tr>
                       <td>1/X</td>
-                      <td>3.0</td>
+                      <td onClick={() => alert("Bet Added...")}>3.0</td>
                     </tr>
                     <tr>
                       <td>1/1</td>
-                      <td>3.0</td>
+                      <td onClick={() => alert("Bet Added...")}>3.0</td>
                     </tr>
                   </tbody>
                 </Table>
@@ -163,11 +163,11 @@ class HomePage extends Component {
                   <tbody striped="1">
                     <tr>
                       <td>Over 2.5</td>
-                      <td>2.1</td>
+                      <td onClick={() => alert("Bet Added...")}>2.1</td>
                     </tr>
                     <tr>
                       <td>Under 2.5</td>
-                      <td>3.2</td>
+                      <td onClick={() => alert("Bet Added...")}>3.2</td>
                     </tr>
                   </tbody>
                 </Table>
@@ -183,19 +183,19 @@ class HomePage extends Component {
                   <tbody striped="1">
                     <tr>
                       <td>0</td>
-                      <td>1.2</td>
+                      <td onClick={() => alert("Bet Added...")}>1.2</td>
                     </tr>
                     <tr>
                       <td>1</td>
-                      <td>3.4</td>
+                      <td onClick={() => alert("Bet Added...")}>3.4</td>
                     </tr>
                     <tr>
                       <td>2</td>
-                      <td>2.3</td>
+                      <td onClick={() => alert("Bet Added...")}>2.3</td>
                     </tr>
                     <tr>
                       <td>3</td>
-                      <td>11</td>
+                      <td onClick={() => alert("Bet Added...")}>11</td>
                     </tr>
                   </tbody>
                 </Table>
@@ -211,19 +211,19 @@ class HomePage extends Component {
                   <tbody striped="1">
                     <tr>
                       <td>0</td>
-                      <td>1.4</td>
+                      <td onClick={() => alert("Bet Added...")}>1.4</td>
                     </tr>
                     <tr>
                       <td>1</td>
-                      <td>2.8</td>
+                      <td onClick={() => alert("Bet Added...")}>2.8</td>
                     </tr>
                     <tr>
                       <td>2</td>
-                      <td>4.0</td>
+                      <td onClick={() => alert("Bet Added...")}>4.0</td>
                     </tr>
                     <tr>
                       <td>3</td>
-                      <td>4.3</td>
+                      <td onClick={() => alert("Bet Added...")}>4.3</td>
                     </tr>
                     
                   </tbody>
@@ -240,11 +240,11 @@ class HomePage extends Component {
                   <tbody striped="1">
                     <tr>
                       <td>Over 7.5</td>
-                      <td>4.1</td>
+                      <td onClick={() => alert("Bet Added...")}>4.1</td>
                     </tr>
                     <tr>
                       <td>Under 7.5</td>
-                      <td>1.2</td>
+                      <td onClick={() => alert("Bet Added...")}>1.2</td>
                     </tr>
                   </tbody>
                 </Table>

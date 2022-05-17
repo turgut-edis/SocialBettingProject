@@ -6,22 +6,26 @@ p {
 
 tr {
   background-color: #dedede;
+  
 }
 
 th {
-  background-color: #999;
   color: #ffffff;
-  padding: 5px 10px 5px 10px;
+  padding: 5px 10px 5px 40px;
+  background-color: #616161;
+
 }
 
 td {
   background-color: #dedede;
   padding: 5px 40px 5px 40px;
+  
 }
 
 th:first-child,
 tr:first-child {
   padding: 0;
+  background-color: #616161;
 }
 
 table {
@@ -48,6 +52,7 @@ tr > td:first-child,
 tr > th:first-child {
   padding: 0;
   padding-left: 6px;
+  
 }
 
 button {

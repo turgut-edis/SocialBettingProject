@@ -1,0 +1,225 @@
+body,
+h1,
+p {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+tr {
+  background-color: #dedede;
+}
+
+th {
+  background-color: #999;
+  color: #ffffff;
+  padding: 5px 10px 5px 10px;
+}
+
+td {
+  background-color: #dedede;
+  padding: 5px 40px 5px 40px;
+}
+
+th:first-child,
+tr:first-child {
+  padding: 0;
+}
+
+table {
+  border-top: 1px solid blue;
+  border-spacing: 0px;
+}
+
+tr:nth-child(odd) > td {
+  background-color: #aaa;
+  color: #fff;
+}
+
+tr > td.player-details:last-child {
+  border: none;
+}
+
+tr > td.player-details {
+  background-color: #fff;
+  color: #ddd;
+  margin-bottom: 20px;
+}
+
+tr > td:first-child,
+tr > th:first-child {
+  padding: 0;
+  padding-left: 6px;
+}
+
+button {
+  background-color: Transparent;
+  background-repeat: no-repeat;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+  font-size: 2em;
+}
+
+.attribute-name {
+  font-weight: bold;
+  color: #666;
+  float: left;
+  padding-left: 15px;
+}
+
+.attribute-value {
+  float: right;
+  padding-right: 15px;
+}
+
+.attribute {
+  border-top: 1px solid #eee;
+  padding: 15px;
+}
+
+.home-container{
+    height: 1200px;
+    width: 80%;
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+    background-color: white;
+    border: 2px solid black;
+  }
+.nav-item7{
+    margin-right: 100px;
+}
+.nav-item8{
+    margin-right: 8%;
+}
+  .user-picture{
+    height: 64px;
+    width: 64px;
+  }
+  .betslip-use{
+    margin-left: 30px;
+  }
+  .like-pic{
+    margin-left: 300px;
+  }
+  .shared-betslip{
+    border-color: #424242;
+    border-style: solid;
+    margin-right: 25%;
+    height: 70px;
+    margin-top: 2px;
+    
+  }
+  .shared-betslip-stat{
+    border-color: #424242;
+    border-style: solid;
+    margin-left: 76%;
+    margin-top: -140px;
+    height: 140px;
+  }
+  .ball-logo{
+    height: 20px;
+    width: 20px;
+  }
+  .mac_id_spacing{
+    margin-left: 4px;
+    justify-content: center;
+  }
+  .match-info-space{
+    margin-left: 10px;
+  }
+  .shared-betslip-tot-match{
+    position: relative;
+    align-items: center;
+    text-align: center;
+    font-weight: bold;
+  }
+  .shared-betslip-tot-match-cnt{
+    position: relative;
+    align-items: center;
+    text-align: center;
+  }
+  .shared-betslip-comments{
+    border-color: #424242;
+    border-style: solid;
+    margin-top: 2px;
+    height: 85px;
+  }
+  .comment_type_input{
+    height: 25px;
+    width: 100%;
+    align-items: flex-end;
+    color: black;
+  }
+  .comment_type_input:focus{
+    height: 25px;
+    width: 100%;
+    align-items: flex-end;
+    color: black;
+  }
+  .comment_tt{
+    font-style: italic;
+  }
+  .like-pic-comment{
+    margin-left: 10px;
+    height: 15px;
+    width: 15px;
+  }
+  .betslip-container{
+    height: 1100px;
+  }
+  .rightpanel-betslip{
+    height: auto;
+    margin-top: 2px;
+  }
+  
+  .betslip-checkout-card{
+    height: 215px;
+    margin-top: 400px;
+    width: 100%;
+    background-color: #E9967A;
+    border-color: #616161;
+    border-style: solid;
+    font-size: 0;
+    background-color: white;
+  }
+  .checkout{
+    font-weight: bold;
+  }
+  .rightpanel-checkout{
+    height: auto;
+    margin-top: 2px;
+  }
+  .input-lower{
+    width: 80%;
+  }
+  .input-lower:focus{
+    height: 25px;
+    width: 100%;
+    align-items: flex-end;
+    color: black;
+  }
+  .lower-icon{
+    margin-top: 5%;
+    height: 24px;
+    width: 24px;
+    margin-right: 10px;
+  
+  }
+  .checkout-button{
+    margin-top: 10px;
+    margin-left: 10px;
+  }
+.betslip-container2 {
+    height: 1200px;
+    position: absolute;
+    width: 20%;
+    margin-left: 77.8%;
+    margin-top: -43px;
+    padding: 1%;
+    display: flex;
+    background-color: white;
+    border: 2px solid black;
+  }

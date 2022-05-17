@@ -88,11 +88,11 @@ class HomePage extends Component {
         <td>{player.id}</td>
         <td>{player.firstName}</td>
         <td>{player.lastName}</td>
-        <td>{player.stats.weight}</td>
-        <td>{player.stats.weight}</td>
-        <td>{player.stats.weight}</td>
-        <td>{player.stats.weight}</td>
-        <td>{player.stats.weight}</td>
+        <td onClick={() => alert("Bet Added...")}>{player.stats.weight}</td>
+        <td onClick={() => alert("Bet Added...")}>{player.stats.weight}</td>
+        <td onClick={() => alert("Bet Added...")}>{player.stats.weight}</td>
+        <td onClick={() => alert("Bet Added...")}>{player.stats.weight}</td>
+        <td onClick={() => alert("Bet Added...")}>{player.stats.weight}</td>
         <td>{player.stats.height}</td>
         <td><Button variant="primary" onClick={() => alert("Bet Added...")}></Button>
         </td>

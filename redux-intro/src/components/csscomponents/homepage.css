@@ -148,6 +148,7 @@ button {
   .rightpanel-checkout{
     height: auto;
     margin-top: 2px;
+    width: 340px;
   }
   .input-lower{
     width: 80%;

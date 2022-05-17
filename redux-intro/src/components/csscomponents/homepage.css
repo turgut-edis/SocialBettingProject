@@ -26,7 +26,7 @@ tr:first-child {
 
 table {
   border-top: 1px solid blue;
-  border-spacing: 0px;
+  border-spacing: 5px;
 }
 
 tr:nth-child(odd) > td {
@@ -35,12 +35,12 @@ tr:nth-child(odd) > td {
 }
 
 tr > td.player-details:last-child {
-  border: none;
+  border: black;
 }
 
 tr > td.player-details {
   background-color: #fff;
-  color: #ddd;
+  color: rgb(0, 0, 0);
   margin-bottom: 20px;
 }
 

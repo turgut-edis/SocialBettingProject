@@ -41,18 +41,45 @@ export default function ProfilePage() {
             <li className="nav-item6">
               <Link className="nav-link" to={"/raffle"}>Raffle</Link>
             </li>
+            <li className="nav-item9">
+            <button type="button" class="btn btn-light">Edit</button>
+            </li>
+            <br></br>
+            <li className="nav-item10">
+            <p >Name Balance</p>
+            </li>
+            <br></br>
             <li className="nav-item8">
-              <p>Funds:1500 TRY {user}</p>
+            <button type="button" class="btn btn-light">Change Balance</button>
             </li>
-            <li className="nav-item7">
-              <p>Welcome, {user}</p>
-            </li>
+            
             <li className="nav-item2">
               <Link className="nav-link" to={"/"}>Logout</Link>
             </li>
           </ul>
         </div>
         </nav>
+        <div id="cover">
+  <form method="get" action="" class="form2">
+    <div class="tb">
+      <div class="td"><input type="text" placeholder="Search" required/></div>
+      <div class="td" id="s-cover">
+        <button type="submit" class="button2">
+          <div id="s-circle"></div>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </form>
+  <div class="left-rect10">
+  <button type="button" class="btn btn-danger btn-lg" >Add Friend</button>
+
+  </div>
+</div>
+<div class="right-rect10">Finished Slips</div>
+<div class="right-rect11">Unfinished Slips</div>
+<div class="right-rect12">Friends List</div>
+<div class="right-rect13">Purchased Tickets</div>
       </div>
 </body>
 

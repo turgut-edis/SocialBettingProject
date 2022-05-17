@@ -5,6 +5,12 @@ export default [
       lastName: "Johnson",
       college: "Michigan State",
       team: "LA Lakers",
+      projects: [
+        {
+          id: "1",
+          name: "test 1"
+        }
+      ],
       stats: {
         height: "6-9",
         weight: "215 lbs",
